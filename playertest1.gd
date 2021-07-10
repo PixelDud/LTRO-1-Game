@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 
 
-var moveSpeed = 120
+var moveSpeed = 50
 var health = 100
 var velocity = Vector2.ZERO
 
