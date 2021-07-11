@@ -3,12 +3,12 @@ extends KinematicBody2D
 var velocity = Vector2.ZERO
 
 export var playerNumber = 0
-export var moveSpeed = 60
 export var health = 100
-export var rightDash = 0
-export var leftDash = 0
-export var canDash = true
-export var hitby = "nothing"
+export var moveSpeed = 60
+export var backSpeed = 30
+var rightDash = 0
+var leftDash = 0
+var canDash = true
 
 # up = "p" + str(playerNumber) + "Up"
 # down = "p" + str(playerNumber) + "Down"
@@ -20,8 +20,6 @@ export var hitby = "nothing"
 
 onready var healthBar = get_parent().get_node("p" + str(playerNumber) + "Health")
 onready var dashAudioCue = $dashAudioCue
-onready var commandTimer = $commandTimer
-onready var dashTimeout = $dashTimeout
 
 func _physics_process(_delta):
 	getHitCheck()
@@ -47,12 +45,16 @@ func movement_input():
 		velocity.x = 0
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Left"):
 		print("Left!")
-		moveSpeed = 30
-		velocity.x -= moveSpeed
+		if (playerNumber == 2):
+			velocity.x -= moveSpeed
+		else:
+			velocity.x -= backSpeed
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Right"):
 		print("Right!")
-		moveSpeed = 60
-		velocity.x += moveSpeed
+		if (playerNumber == 2):
+			velocity.x += backSpeed
+		else:
+			velocity.x += moveSpeed
 	else:
 		velocity.x = 0
 		
@@ -60,29 +62,27 @@ func movement_input():
 #ok so the dash is jank but it kind of works, just need to figure out a way to make it so the dash is smooth not teleporting
 func command_input():
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "Right") :
-		commandTimer.start()
+		# commandTimer start
 		rightDash += 1
 	elif Input.is_action_just_pressed("p" + str(playerNumber) + "Left"):
-		commandTimer.start()
+		# commandTimer start
 		leftDash += 1
 	if rightDash >= 2 and canDash:
-		dashTimeout.start()
-		dashAudioCue.play()
+		# dashTimeout start
 		position.x += 50
-		print("dash")
+		print("Dash!")
 		rightDash = 0
 		canDash = false
 	if leftDash >= 2 and canDash:
-		dashTimeout.start()
-		dashAudioCue.play()
+		# dashTimeout start
 		position.x -= 30
-		print("dash")
+		print("Dash!")
 		leftDash = 0
 		canDash = false
 		
 func getHitCheck():
-	hitby = get_collider()	
-		
+	# use areas instead
+	pass
 		
 #timers section down here		
 func _on_Commandtimer_timeout():

@@ -1,32 +1,32 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Prefabs/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Images/Backgrounds/template.png" type="Texture" id=2]
-[ext_resource path="res://Assets/Sounds/SFX/testdashsound1.wav" type="AudioStream" id=3]
 
-[sub_resource type="CircleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=3]
 
-[sub_resource type="StyleBoxFlat" id=1]
+[sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.737255, 0.196078, 0.196078, 1 )
 
 [node name="World" type="Node2D"]
+
+[node name="Background" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+centered = false
 
 [node name="hitBoxTesting" type="Area2D" parent="."]
 position = Vector2( 120.609, 110.1 )
 
 [node name="hitBox" type="CollisionShape2D" parent="hitBoxTesting"]
-shape = SubResource( 2 )
-
-[node name="Background" type="Sprite" parent="."]
-texture = ExtResource( 2 )
-centered = false
+position = Vector2( -0.609001, -6.1 )
+shape = SubResource( 3 )
 
 [node name="p1Health" type="ProgressBar" parent="."]
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 56.0
 margin_bottom = 16.0
-custom_styles/fg = SubResource( 1 )
+custom_styles/fg = SubResource( 2 )
 percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -37,7 +37,7 @@ margin_left = 184.0
 margin_top = 8.0
 margin_right = 232.0
 margin_bottom = 16.0
-custom_styles/fg = SubResource( 1 )
+custom_styles/fg = SubResource( 2 )
 percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -51,48 +51,7 @@ polygon = PoolVector2Array( 0, 0, 0, 136, 240, 136, 240, 0, 0, 0, -8, -8, 248, -
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 32, 104 )
 playerNumber = 1
-moveSpeed = null
-health = null
-rightDash = null
-leftDash = null
-canDash = null
-
-[node name="dashAudioCue" type="AudioStreamPlayer2D" parent="Player"]
-position = Vector2( -32, -104 )
-stream = ExtResource( 3 )
-volume_db = -8.078
-
-[node name="commandTimer" type="Timer" parent="Player"]
-wait_time = 0.17
-one_shot = true
-
-[node name="dashTimeout" type="Timer" parent="Player"]
-wait_time = 0.7
-one_shot = true
 
 [node name="Player2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 208, 104 )
 playerNumber = 2
-moveSpeed = null
-health = null
-rightDash = null
-leftDash = null
-canDash = null
-
-[node name="dashAudioCue" type="AudioStreamPlayer2D" parent="Player2"]
-position = Vector2( -32, -104 )
-stream = ExtResource( 3 )
-volume_db = -8.078
-
-[node name="commandTimer" type="Timer" parent="Player2"]
-wait_time = 0.17
-one_shot = true
-
-[node name="dashTimeout" type="Timer" parent="Player2"]
-wait_time = 0.7
-one_shot = true
-
-[connection signal="timeout" from="Player/commandTimer" to="Player" method="_on_Commandtimer_timeout"]
-[connection signal="timeout" from="Player/dashTimeout" to="Player" method="_on_dashTimeout_timeout"]
-[connection signal="timeout" from="Player2/commandTimer" to="Player" method="_on_Commandtimer_timeout"]
-[connection signal="timeout" from="Player2/dashTimeout" to="Player" method="_on_dashTimeout_timeout"]
