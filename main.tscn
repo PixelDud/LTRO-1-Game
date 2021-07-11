@@ -51,6 +51,11 @@ polygon = PoolVector2Array( 0, 0, 0, 136, 240, 136, 240, 0, 0, 0, -8, -8, 248, -
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 32, 104 )
 playerNumber = 1
+moveSpeed = null
+health = null
+rightDash = null
+leftDash = null
+canDash = null
 
 [node name="dashAudioCue" type="AudioStreamPlayer2D" parent="Player"]
 position = Vector2( -32, -104 )
@@ -68,6 +73,11 @@ one_shot = true
 [node name="Player2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 208, 104 )
 playerNumber = 2
+moveSpeed = null
+health = null
+rightDash = null
+leftDash = null
+canDash = null
 
 [node name="dashAudioCue" type="AudioStreamPlayer2D" parent="Player2"]
 position = Vector2( -32, -104 )

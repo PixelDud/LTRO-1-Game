@@ -8,6 +8,7 @@ export var health = 100
 export var rightDash = 0
 export var leftDash = 0
 export var canDash = true
+export var hitby = "nothing"
 
 # up = "p" + str(playerNumber) + "Up"
 # down = "p" + str(playerNumber) + "Down"
@@ -23,6 +24,7 @@ onready var commandTimer = $commandTimer
 onready var dashTimeout = $dashTimeout
 
 func _physics_process(_delta):
+	getHitCheck()
 	movement_input()
 	command_input()
 	healthBar.value = health
@@ -77,6 +79,12 @@ func command_input():
 		print("dash")
 		leftDash = 0
 		canDash = false
+		
+func getHitCheck():
+	hitby = get_collider()	
+		
+		
+#timers section down here		
 func _on_Commandtimer_timeout():
 	rightDash = 0
 	leftDash = 0
