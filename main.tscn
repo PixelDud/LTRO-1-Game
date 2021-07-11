@@ -58,8 +58,12 @@ stream = ExtResource( 3 )
 volume_db = -8.078
 
 [node name="commandTimer" type="Timer" parent="Player"]
-wait_time = 0.3
-autostart = true
+wait_time = 0.17
+one_shot = true
+
+[node name="dashTimeout" type="Timer" parent="Player"]
+wait_time = 0.7
+one_shot = true
 
 [node name="Player2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 208, 104 )
@@ -71,7 +75,14 @@ stream = ExtResource( 3 )
 volume_db = -8.078
 
 [node name="commandTimer" type="Timer" parent="Player2"]
-wait_time = 0.3
+wait_time = 0.17
+one_shot = true
+
+[node name="dashTimeout" type="Timer" parent="Player2"]
+wait_time = 0.7
+one_shot = true
 
 [connection signal="timeout" from="Player/commandTimer" to="Player" method="_on_Commandtimer_timeout"]
+[connection signal="timeout" from="Player/dashTimeout" to="Player" method="_on_dashTimeout_timeout"]
 [connection signal="timeout" from="Player2/commandTimer" to="Player" method="_on_Commandtimer_timeout"]
+[connection signal="timeout" from="Player2/dashTimeout" to="Player" method="_on_dashTimeout_timeout"]

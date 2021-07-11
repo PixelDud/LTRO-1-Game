@@ -7,6 +7,7 @@ export var moveSpeed = 60
 export var health = 100
 export var rightDash = 0
 export var leftDash = 0
+export var canDash = true
 
 # up = "p" + str(playerNumber) + "Up"
 # down = "p" + str(playerNumber) + "Down"
@@ -19,6 +20,7 @@ export var leftDash = 0
 onready var healthBar = get_parent().get_node("p" + str(playerNumber) + "Health")
 onready var dashAudioCue = $dashAudioCue
 onready var commandTimer = $commandTimer
+onready var dashTimeout = $dashTimeout
 
 func _physics_process(_delta):
 	movement_input()
@@ -53,25 +55,32 @@ func movement_input():
 		velocity.x = 0
 		
 		
-#trying to implement dashes and shit but its tough rn, your code makes sense but i'm just struggling 
-#cause i don't know enough
+#ok so the dash is jank but it kind of works, just need to figure out a way to make it so the dash is smooth not teleporting
 func command_input():
-	if Input.is_action_just_pressed("p" + str(playerNumber) + "Right"):
+	if Input.is_action_just_pressed("p" + str(playerNumber) + "Right") :
 		commandTimer.start()
 		rightDash += 1
 	elif Input.is_action_just_pressed("p" + str(playerNumber) + "Left"):
 		commandTimer.start()
 		leftDash += 1
-	if rightDash >= 2:
+	if rightDash >= 2 and canDash:
+		dashTimeout.start()
 		dashAudioCue.play()
 		position.x += 50
 		print("dash")
 		rightDash = 0
-	if leftDash >= 2:
+		canDash = false
+	if leftDash >= 2 and canDash:
+		dashTimeout.start()
 		dashAudioCue.play()
 		position.x -= 30
 		print("dash")
 		leftDash = 0
+		canDash = false
 func _on_Commandtimer_timeout():
 	rightDash = 0
 	leftDash = 0
+
+
+func _on_dashTimeout_timeout():
+	canDash = true
