@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scripts/pauseMenu.gd" type="Script" id=1]
+
+[node name="Pause Menu" type="CanvasLayer"]
+layer = 10
+
+[node name="Pause" type="Control" parent="."]
+pause_mode = 2
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="background" type="ColorRect" parent="Pause"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.113725, 0.109804, 0.121569, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Menu" type="Control" parent="Pause"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -75.0
+margin_top = -28.0
+margin_right = 75.0
+margin_bottom = 28.0
+
+[node name="Resume" type="Button" parent="Pause/Menu"]
+modulate = Color( 0.917647, 0.882353, 0.941176, 1 )
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -53.0
+margin_right = 53.0
+margin_bottom = 20.0
+action_mode = 0
+text = "Resume Game"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Exit" type="Button" parent="Pause/Menu"]
+modulate = Color( 0.917647, 0.882353, 0.941176, 1 )
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -17.5
+margin_top = -20.0
+margin_right = 17.5
+action_mode = 0
+text = "Exit"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="Pause/Menu/Resume" to="Pause" method="_on_Resume_pressed"]
+[connection signal="pressed" from="Pause/Menu/Exit" to="Pause" method="_on_Exit_pressed"]

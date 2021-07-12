@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 var velocity = Vector2.ZERO
 
+export var flipSprite = false
 export var playerNumber = 0
 export var health = 100
 export var moveSpeed = 60
@@ -17,6 +18,8 @@ var leftDash = 0
 var canDash = true
 var isDashing = false
 var inputTimeout = 0.5
+var attackCooldown = 0.332
+var specialCooldown = 0.332
 var dashCooldown = 0.7
 var canAttack = true
 
@@ -32,9 +35,11 @@ onready var healthBar = get_parent().get_node("p" + str(playerNumber) + "Health"
 onready var dashAudioCue = $dashAudioCue
 
 func _physics_process(_delta):
+	$Sprite.flip_h = flipSprite
+	
 	getHitCheck()
 	movement_input()
-	dash_input()
+#	dash_input()
 	attackCheck()
 	healthBar.value = health
 	
@@ -68,90 +73,111 @@ func movement_input():
 	else:
 		velocity.x = 0
 
-func dash_input():
-	if Input.is_action_just_pressed("p" + str(playerNumber) + "Right") :
-		rightDash += 1
-		yield(get_tree().create_timer(inputTimeout), "timeout")
-	elif Input.is_action_just_pressed("p" + str(playerNumber) + "Left"):
-		leftDash += 1
-		yield(get_tree().create_timer(inputTimeout), "timeout")
-	if rightDash >= 2 and canDash:
-		canDash = false
-		isDashing = true
-		dashRight(position.x)
-		yield(get_tree().create_timer(dashCooldown), "timeout")
-		canDash = true
-	if leftDash >= 2 and canDash:
-		canDash = false
-		isDashing = true
-		dashLeft(position.x)
-		yield(get_tree().create_timer(dashCooldown), "timeout")
-		canDash = true
-
-func dashRight(currentPos):
-	print("Dash!")
-	if (playerNumber == 2):
-		while (currentPos != currentPos + backDash):
-			position.x = lerp(currentPos, currentPos + backDash, 0.25)
-			backDash -= backDash/0.25
-		isDashing = false
-		backDash = backDashDefault
-	else:
-		while (currentPos != currentPos + forwardsDash):
-			position.x = lerp(currentPos, currentPos + forwardsDash, 0.25)
-			forwardsDash -= forwardsDash/0.25
-		isDashing = false
-		forwardsDash = forwardsDashDefault
-	rightDash = 0
-
-func dashLeft(currentPos):
-	print("Dash!")
-	if (playerNumber == 2):
-		while (currentPos != currentPos - forwardsDash):
-			position.x = lerp(currentPos, currentPos - forwardsDash, 0.25)
-			forwardsDash -= forwardsDash/0.25
-		isDashing = false
-		forwardsDash = forwardsDashDefault
-	else:
-		while (currentPos != currentPos - backDash):
-			position.x = lerp(currentPos, currentPos - backDash, 0.25)
-			backDash -= backDash/0.25
-		isDashing = false
-		backDash = backDashDefault
-	leftDash = 0
+#func dash_input():
+#	if Input.is_action_just_pressed("p" + str(playerNumber) + "Right") :
+#		rightDash += 1
+#		yield(get_tree().create_timer(inputTimeout), "timeout")
+#	elif Input.is_action_just_pressed("p" + str(playerNumber) + "Left"):
+#		leftDash += 1
+#		yield(get_tree().create_timer(inputTimeout), "timeout")
+#	if rightDash >= 2 and canDash:
+#		canDash = false
+#		isDashing = true
+#		dashRight(position.x)
+#		yield(get_tree().create_timer(dashCooldown), "timeout")
+#		canDash = true
+#	if leftDash >= 2 and canDash:
+#		canDash = false
+#		isDashing = true
+#		dashLeft(position.x)
+#		yield(get_tree().create_timer(dashCooldown), "timeout")
+#		canDash = true
+#
+#func dashRight(currentPos):
+#	print("Dash!")
+#	if (playerNumber == 2):
+#		while (currentPos != currentPos + backDash):
+#			position.x = lerp(currentPos, currentPos + backDash, 0.25)
+#			backDash -= backDash/0.25
+#		isDashing = false
+#		backDash = backDashDefault
+#	else:
+#		while (currentPos != currentPos + forwardsDash):
+#			position.x = lerp(currentPos, currentPos + forwardsDash, 0.25)
+#			forwardsDash -= forwardsDash/0.25
+#		isDashing = false
+#		forwardsDash = forwardsDashDefault
+#	rightDash = 0
+#
+#func dashLeft(currentPos):
+#	print("Dash!")
+#	if (playerNumber == 2):
+#		while (currentPos != currentPos - forwardsDash):
+#			position.x = lerp(currentPos, currentPos - forwardsDash, 0.25)
+#			forwardsDash -= forwardsDash/0.25
+#		isDashing = false
+#		forwardsDash = forwardsDashDefault
+#	else:
+#		while (currentPos != currentPos - backDash):
+#			position.x = lerp(currentPos, currentPos - backDash, 0.25)
+#			backDash -= backDash/0.25
+#		isDashing = false
+#		backDash = backDashDefault
+#	leftDash = 0
 
 func getHitCheck():
-	# use areas instead
+	# use areas
 	pass
 	
 func attackCheck():
-	if Input.is_action_pressed("p" + str(playerNumber) + "Down") and Input.is_action_just_pressed("p1A") and canAttack:
-		print("downAttack")
-		canAttack = false
-		yield(get_tree().create_timer(0.332), "timeout")
-		canAttack = true
-		print("canattacknow")
-	if Input.is_action_pressed("p" + str(playerNumber) + "Right") and Input.is_action_just_pressed("p1A") and canAttack:
-		print("rightAttack")
-		canAttack = false
-		yield(get_tree().create_timer(0.332), "timeout")
-		canAttack = true
-		print("canattacknow")
-	if Input.is_action_pressed("p" + str(playerNumber) + "Left") and Input.is_action_just_pressed("p1A") and canAttack:
-		print("leftAttack")
-		canAttack = false
-		yield(get_tree().create_timer(0.332), "timeout")
-		canAttack = true
-		print("canattacknow")
-	if Input.is_action_pressed("p" + str(playerNumber) + "Up") and Input.is_action_just_pressed("p1A") and canAttack:
-		print("upAttack")
-		canAttack = false
-		yield(get_tree().create_timer(0.332), "timeout")
-		canAttack = true
-		print("canattacknow")
-	if Input.is_action_pressed("p" + str(playerNumber) + "Down") and Input.is_action_just_pressed("p1B") and canAttack:
-		print("downSpecial")
-		canAttack = false
-		yield(get_tree().create_timer(0.332), "timeout")
-		canAttack = true
-		print("canattacknow")
+	if Input.is_action_pressed("p" + str(playerNumber) + "A") and canAttack:
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "Up"):
+			print("Up Attack!")
+			canAttack = false
+			yield(get_tree().create_timer(attackCooldown), "timeout")
+			canAttack = true
+			print("Can attack now.")
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "Down"):
+			print("Down Attack!")
+			canAttack = false
+			yield(get_tree().create_timer(attackCooldown), "timeout")
+			canAttack = true
+			print("Can attack now.")
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "Left"):
+			print("Left Attack!")
+			canAttack = false
+			yield(get_tree().create_timer(attackCooldown), "timeout")
+			canAttack = true
+			print("Can attack now.")
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "Right"):
+			print("Right Attack!")
+			canAttack = false
+			yield(get_tree().create_timer(attackCooldown), "timeout")
+			canAttack = true
+			print("Can attack now.")
+	
+	if Input.is_action_pressed("p" + str(playerNumber) + "B") and canAttack:
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "Up"):
+			print("Up Special!")
+			canAttack = false
+			yield(get_tree().create_timer(specialCooldown), "timeout")
+			canAttack = true
+			print("Can special attack now.")
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "Down"):
+			print("Down Special!")
+			canAttack = false
+			yield(get_tree().create_timer(specialCooldown), "timeout")
+			canAttack = true
+			print("Can special attack now.")
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "Left"):
+			print("Left Special!")
+			canAttack = false
+			yield(get_tree().create_timer(specialCooldown), "timeout")
+			canAttack = true
+			print("Can special attack now.")
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "Right"):
+			print("Right Special!")
+			canAttack = false
+			yield(get_tree().create_timer(specialCooldown), "timeout")
+			canAttack = true
+			print("Can special attack now.")
