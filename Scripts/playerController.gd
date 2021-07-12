@@ -35,6 +35,7 @@ func _physics_process(_delta):
 	getHitCheck()
 	movement_input()
 	dash_input()
+	attackCheck()
 	healthBar.value = health
 	
 	if (healthBar.value <= 0):
@@ -122,3 +123,35 @@ func dashLeft(currentPos):
 func getHitCheck():
 	# use areas instead
 	pass
+	
+func attackCheck():
+	if Input.is_action_pressed("p" + str(playerNumber) + "Down") and Input.is_action_just_pressed("p1A") and canAttack:
+		print("downAttack")
+		canAttack = false
+		yield(get_tree().create_timer(0.332), "timeout")
+		canAttack = true
+		print("canattacknow")
+	if Input.is_action_pressed("p" + str(playerNumber) + "Right") and Input.is_action_just_pressed("p1A") and canAttack:
+		print("rightAttack")
+		canAttack = false
+		yield(get_tree().create_timer(0.332), "timeout")
+		canAttack = true
+		print("canattacknow")
+	if Input.is_action_pressed("p" + str(playerNumber) + "Left") and Input.is_action_just_pressed("p1A") and canAttack:
+		print("leftAttack")
+		canAttack = false
+		yield(get_tree().create_timer(0.332), "timeout")
+		canAttack = true
+		print("canattacknow")
+	if Input.is_action_pressed("p" + str(playerNumber) + "Up") and Input.is_action_just_pressed("p1A") and canAttack:
+		print("upAttack")
+		canAttack = false
+		yield(get_tree().create_timer(0.332), "timeout")
+		canAttack = true
+		print("canattacknow")
+	if Input.is_action_pressed("p" + str(playerNumber) + "Down") and Input.is_action_just_pressed("p1B") and canAttack:
+		print("downSpecial")
+		canAttack = false
+		yield(get_tree().create_timer(0.332), "timeout")
+		canAttack = true
+		print("canattacknow")
