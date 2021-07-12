@@ -6,9 +6,19 @@ export var playerNumber = 0
 export var health = 100
 export var moveSpeed = 60
 export var backSpeed = 30
+export var forwardsDashDefault = 50
+export var backDashDefault = 25
+var forwardsDash = forwardsDashDefault
+var backDash = backDashDefault
+var rightDashDir = Vector2(1,0)
+var leftDashDir = Vector2(-1,0)
 var rightDash = 0
 var leftDash = 0
 var canDash = true
+var isDashing = false
+var inputTimeout = 0.5
+var dashCooldown = 0.7
+var canAttack = true
 
 # up = "p" + str(playerNumber) + "Up"
 # down = "p" + str(playerNumber) + "Down"
@@ -24,7 +34,7 @@ onready var dashAudioCue = $dashAudioCue
 func _physics_process(_delta):
 	getHitCheck()
 	movement_input()
-	command_input()
+	dash_input()
 	healthBar.value = health
 	
 	if (healthBar.value <= 0):
@@ -37,7 +47,6 @@ func _physics_process(_delta):
 	velocity = move_and_slide(velocity, Vector2.UP)
 
 func movement_input():
-	
 	if Input.is_action_pressed("p" + str(playerNumber) + "Up"):
 		print("Up!")
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Down"):
@@ -57,38 +66,59 @@ func movement_input():
 			velocity.x += moveSpeed
 	else:
 		velocity.x = 0
-		
-		
-#ok so the dash is jank but it kind of works, just need to figure out a way to make it so the dash is smooth not teleporting
-func command_input():
+
+func dash_input():
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "Right") :
-		# commandTimer start
 		rightDash += 1
+		yield(get_tree().create_timer(inputTimeout), "timeout")
 	elif Input.is_action_just_pressed("p" + str(playerNumber) + "Left"):
-		# commandTimer start
 		leftDash += 1
+		yield(get_tree().create_timer(inputTimeout), "timeout")
 	if rightDash >= 2 and canDash:
-		# dashTimeout start
-		position.x += 50
-		print("Dash!")
-		rightDash = 0
 		canDash = false
+		isDashing = true
+		dashRight(position.x)
+		yield(get_tree().create_timer(dashCooldown), "timeout")
+		canDash = true
 	if leftDash >= 2 and canDash:
-		# dashTimeout start
-		position.x -= 30
-		print("Dash!")
-		leftDash = 0
 		canDash = false
-		
+		isDashing = true
+		dashLeft(position.x)
+		yield(get_tree().create_timer(dashCooldown), "timeout")
+		canDash = true
+
+func dashRight(currentPos):
+	print("Dash!")
+	if (playerNumber == 2):
+		while (currentPos != currentPos + backDash):
+			position.x = lerp(currentPos, currentPos + backDash, 0.25)
+			backDash -= backDash/0.25
+		isDashing = false
+		backDash = backDashDefault
+	else:
+		while (currentPos != currentPos + forwardsDash):
+			position.x = lerp(currentPos, currentPos + forwardsDash, 0.25)
+			forwardsDash -= forwardsDash/0.25
+		isDashing = false
+		forwardsDash = forwardsDashDefault
+	rightDash = 0
+
+func dashLeft(currentPos):
+	print("Dash!")
+	if (playerNumber == 2):
+		while (currentPos != currentPos - forwardsDash):
+			position.x = lerp(currentPos, currentPos - forwardsDash, 0.25)
+			forwardsDash -= forwardsDash/0.25
+		isDashing = false
+		forwardsDash = forwardsDashDefault
+	else:
+		while (currentPos != currentPos - backDash):
+			position.x = lerp(currentPos, currentPos - backDash, 0.25)
+			backDash -= backDash/0.25
+		isDashing = false
+		backDash = backDashDefault
+	leftDash = 0
+
 func getHitCheck():
 	# use areas instead
 	pass
-		
-#timers section down here		
-func _on_Commandtimer_timeout():
-	rightDash = 0
-	leftDash = 0
-
-
-func _on_dashTimeout_timeout():
-	canDash = true
