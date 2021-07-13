@@ -24,6 +24,11 @@ var dashCooldown = 0.7
 var canAttack = true
 var attackDir = "right"
 var block = "not"
+var moveBoxes = false
+var recovery = false
+#moveBoxes is for when a move has its hitboxes active
+#recovery is when you are recovering from doing a move
+
 # up = "p" + str(playerNumber) + "Up"
 # down = "p" + str(playerNumber) + "Down"
 # left = "p" + str(playerNumber) + "Left"
@@ -173,7 +178,20 @@ func attackCheck():
 		print("Right Attack!")
 		canAttack = false
 		moveSpeed = 0
-		yield(get_tree().create_timer(attackCooldown), "timeout")
+		sprite.animation = "forwardkick"
+		print("startup")
+		position.x += 5
+		yield(get_tree().create_timer(0.23333), "timeout")
+		moveBoxes = true
+		print("hitboxes")
+		position.x += 5
+		yield(get_tree().create_timer(0.008333), "timeout")
+		print("recovering")
+		recovery = true
+		moveBoxes = false
+		position.x +=3
+		yield(get_tree().create_timer(0.2), "timeout")
+		recovery = false
 		moveSpeed = 60
 		canAttack = true
 		print("Can attack now.")
