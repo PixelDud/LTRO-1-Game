@@ -57,20 +57,21 @@ func movement_input():
 	if Input.is_action_pressed("p" + str(playerNumber) + "Up"):
 		print("Up!")
 		attackDir = "Up"
+		velocity.x = 0 
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Down"):
 		print("Down!")
 		velocity.x = 0
-		attackDir == "Down"
+		attackDir = "Down"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Left"):
 		print("Left!")
-		attackDir == "Left"
+		attackDir = "Left"
 		if (playerNumber == 2):
 			velocity.x -= moveSpeed
 		else:
 			velocity.x -= backSpeed
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Right"):
 		print("Right!")
-		attackDir == "Right"
+		attackDir = "Right"
 		if (playerNumber == 2):
 			velocity.x += backSpeed
 		else:
