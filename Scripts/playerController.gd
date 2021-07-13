@@ -26,6 +26,8 @@ var attackDir = "right"
 var block = "not"
 var moveBoxes = false
 var recovery = false
+var hitType = "nothing"
+#hitType is for deciding whether a move hits low, medium, or high
 #moveBoxes is for when a move has its hitboxes active
 #recovery is when you are recovering from doing a move
 
@@ -36,6 +38,8 @@ var recovery = false
 # b = "p" + str(playerNumber) + "B"
 # a = "p" + str(playerNumber) + "A"
 # start = "p" + str(playerNumber) + "Start"
+onready var hurtbox = $Collision
+onready var forwardKickBox = $HitBoxes/ForwardKick
 onready var lowKickBox = $HitBoxes/Lowkick
 onready var sprite = $Sprite
 onready var healthBar = get_parent().get_node("p" + str(playerNumber) + "Health")
@@ -63,7 +67,9 @@ func _physics_process(_delta):
 func movement_input():
 	if canAttack:
 		sprite.animation = "default"
-	
+		hurtbox.position.x = 0.118 
+		hurtbox.position.y = -1.006
+		hurtbox.shape.extents = Vector2(9,24)
 	if Input.is_action_pressed("p" + str(playerNumber) + "Up"):
 		print("Up!")
 		attackDir = "Up"
@@ -76,6 +82,9 @@ func movement_input():
 		block = "Down"
 		if canAttack:
 			sprite.animation = "block"
+			hurtbox.position.x = 0.118 
+			hurtbox.position.y = 8.253
+			hurtbox.shape.extents = Vector2(9,15)
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Left"):
 		print("Left!")
 		attackDir = "Left"
@@ -181,11 +190,14 @@ func attackCheck():
 		sprite.animation = "forwardkick"
 		print("startup")
 		position.x += 5
+		forwardKickBox.hide()
 		yield(get_tree().create_timer(0.23333), "timeout")
+		forwardKickBox.show()
 		moveBoxes = true
 		print("hitboxes")
 		position.x += 5
 		yield(get_tree().create_timer(0.008333), "timeout")
+		forwardKickBox.hide()
 		print("recovering")
 		recovery = true
 		moveBoxes = false
@@ -200,12 +212,23 @@ func attackCheck():
 		canAttack = false
 		moveSpeed = 0
 		sprite.animation = "lowkick"
-		lowKickBox.show()
-		yield(get_tree().create_timer(attackCooldown), "timeout")
+		print("startup")
 		lowKickBox.hide()
+		yield(get_tree().create_timer(0.1), "timeout")
+		lowKickBox.show()
+		moveBoxes = true
+		yield(get_tree().create_timer(0.05), "timeout")
+		lowKickBox.hide()
+		print("recovering")
+		recovery = true
+		moveBoxes = false
+		yield(get_tree().create_timer(0.1), "timeout")
+		recovery = false
 		moveSpeed = 60
 		canAttack = true
 		print("Can attack now.")
+		
+	
 	
 	#if Input.is_action_pressed("p" + str(playerNumber) + "A") and canAttack:
 	#	if Input.is_action_just_pressed("p" + str(playerNumber) + "Up"):
