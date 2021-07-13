@@ -23,7 +23,7 @@ var specialCooldown = 0.332
 var dashCooldown = 0.7
 var canAttack = true
 var attackDir = "right"
-var blocking = false
+var block = "not"
 # up = "p" + str(playerNumber) + "Up"
 # down = "p" + str(playerNumber) + "Down"
 # left = "p" + str(playerNumber) + "Left"
@@ -31,7 +31,7 @@ var blocking = false
 # b = "p" + str(playerNumber) + "B"
 # a = "p" + str(playerNumber) + "A"
 # start = "p" + str(playerNumber) + "Start"
-
+onready var sprite = $Sprite
 onready var healthBar = get_parent().get_node("p" + str(playerNumber) + "Health")
 onready var dashAudioCue = $dashAudioCue
 
@@ -54,28 +54,36 @@ func _physics_process(_delta):
 	velocity = move_and_slide(velocity, Vector2.UP)
 
 func movement_input():
+	sprite.animation = "default"
 	if Input.is_action_pressed("p" + str(playerNumber) + "Up"):
 		print("Up!")
 		attackDir = "Up"
 		velocity.x = 0 
+		block = "not"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Down"):
 		print("Down!")
 		velocity.x = 0
 		attackDir = "Down"
+		block = "Down"
+		sprite.animation = "block"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Left"):
 		print("Left!")
 		attackDir = "Left"
 		if (playerNumber == 2):
 			velocity.x -= moveSpeed
+			block = "not"
 		else:
 			velocity.x -= backSpeed
+			block = "Standing"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Right"):
 		print("Right!")
 		attackDir = "Right"
 		if (playerNumber == 2):
 			velocity.x += backSpeed
+			block = "Standing"
 		else:
 			velocity.x += moveSpeed
+			block = "not"
 	else:
 		attackDir = "Right"
 		velocity.x = 0
