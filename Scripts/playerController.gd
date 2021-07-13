@@ -39,6 +39,7 @@ func _physics_process(_delta):
 	$Sprite.flip_h = flipSprite
 	
 	getHitCheck()
+	
 	movement_input()
 #	dash_input()
 	attackCheck()
@@ -54,7 +55,9 @@ func _physics_process(_delta):
 	velocity = move_and_slide(velocity, Vector2.UP)
 
 func movement_input():
-	sprite.animation = "default"
+	if canAttack:
+		sprite.animation = "default"
+	
 	if Input.is_action_pressed("p" + str(playerNumber) + "Up"):
 		print("Up!")
 		attackDir = "Up"
@@ -65,7 +68,8 @@ func movement_input():
 		velocity.x = 0
 		attackDir = "Down"
 		block = "Down"
-		sprite.animation = "block"
+		if canAttack:
+			sprite.animation = "block"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Left"):
 		print("Left!")
 		attackDir = "Left"
@@ -166,6 +170,7 @@ func attackCheck():
 		print("Right Attack!")
 		canAttack = false
 		moveSpeed = 0
+		sprite.animation = "lowkick"
 		yield(get_tree().create_timer(attackCooldown), "timeout")
 		moveSpeed = 60
 		canAttack = true
@@ -174,6 +179,7 @@ func attackCheck():
 		print("Down Attack!")
 		canAttack = false
 		moveSpeed = 0
+		sprite.animation = "lowkick"
 		yield(get_tree().create_timer(attackCooldown), "timeout")
 		moveSpeed = 60
 		canAttack = true
