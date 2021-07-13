@@ -31,6 +31,7 @@ var block = "not"
 # b = "p" + str(playerNumber) + "B"
 # a = "p" + str(playerNumber) + "A"
 # start = "p" + str(playerNumber) + "Start"
+onready var lowKickBox = $HitBoxes/Lowkick
 onready var sprite = $Sprite
 onready var healthBar = get_parent().get_node("p" + str(playerNumber) + "Health")
 onready var dashAudioCue = $dashAudioCue
@@ -143,9 +144,11 @@ func movement_input():
 #		isDashing = false
 #		backDash = backDashDefault
 #	leftDash = 0
+func _on_Collision_area_entered(area):
+	print("enter")
 
 func getHitCheck():
-	# use areas
+	
 	pass
 	
 func attackCheck():
@@ -170,7 +173,6 @@ func attackCheck():
 		print("Right Attack!")
 		canAttack = false
 		moveSpeed = 0
-		sprite.animation = "lowkick"
 		yield(get_tree().create_timer(attackCooldown), "timeout")
 		moveSpeed = 60
 		canAttack = true
@@ -180,7 +182,9 @@ func attackCheck():
 		canAttack = false
 		moveSpeed = 0
 		sprite.animation = "lowkick"
+		lowKickBox.show()
 		yield(get_tree().create_timer(attackCooldown), "timeout")
+		lowKickBox.hide()
 		moveSpeed = 60
 		canAttack = true
 		print("Can attack now.")
