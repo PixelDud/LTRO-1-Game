@@ -4,7 +4,7 @@ var velocity = Vector2.ZERO
 
 export var flipSprite = false
 export var playerNumber = 0
-export var health = 100
+export var health = 200
 export var moveSpeed = 60
 export var backSpeed = 30
 export var forwardsDashDefault = 50
@@ -22,7 +22,8 @@ var attackCooldown = 0.332
 var specialCooldown = 0.332
 var dashCooldown = 0.7
 var canAttack = true
-
+var attackDir = "right"
+var blocking = false
 # up = "p" + str(playerNumber) + "Up"
 # down = "p" + str(playerNumber) + "Down"
 # left = "p" + str(playerNumber) + "Left"
@@ -55,22 +56,27 @@ func _physics_process(_delta):
 func movement_input():
 	if Input.is_action_pressed("p" + str(playerNumber) + "Up"):
 		print("Up!")
+		attackDir = "Up"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Down"):
 		print("Down!")
 		velocity.x = 0
+		attackDir == "Down"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Left"):
 		print("Left!")
+		attackDir == "Left"
 		if (playerNumber == 2):
 			velocity.x -= moveSpeed
 		else:
 			velocity.x -= backSpeed
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Right"):
 		print("Right!")
+		attackDir == "Right"
 		if (playerNumber == 2):
 			velocity.x += backSpeed
 		else:
 			velocity.x += moveSpeed
 	else:
+		attackDir = "Right"
 		velocity.x = 0
 
 #func dash_input():
@@ -130,54 +136,88 @@ func getHitCheck():
 	pass
 	
 func attackCheck():
-	if Input.is_action_pressed("p" + str(playerNumber) + "A") and canAttack:
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "Up"):
-			print("Up Attack!")
-			canAttack = false
-			yield(get_tree().create_timer(attackCooldown), "timeout")
-			canAttack = true
-			print("Can attack now.")
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "Down"):
-			print("Down Attack!")
-			canAttack = false
-			yield(get_tree().create_timer(attackCooldown), "timeout")
-			canAttack = true
-			print("Can attack now.")
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "Left"):
-			print("Left Attack!")
-			canAttack = false
-			yield(get_tree().create_timer(attackCooldown), "timeout")
-			canAttack = true
-			print("Can attack now.")
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "Right"):
-			print("Right Attack!")
-			canAttack = false
-			yield(get_tree().create_timer(attackCooldown), "timeout")
-			canAttack = true
-			print("Can attack now.")
 	
-	if Input.is_action_pressed("p" + str(playerNumber) + "B") and canAttack:
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "Up"):
-			print("Up Special!")
-			canAttack = false
-			yield(get_tree().create_timer(specialCooldown), "timeout")
-			canAttack = true
-			print("Can special attack now.")
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "Down"):
-			print("Down Special!")
-			canAttack = false
-			yield(get_tree().create_timer(specialCooldown), "timeout")
-			canAttack = true
-			print("Can special attack now.")
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "Left"):
-			print("Left Special!")
-			canAttack = false
-			yield(get_tree().create_timer(specialCooldown), "timeout")
-			canAttack = true
-			print("Can special attack now.")
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "Right"):
-			print("Right Special!")
-			canAttack = false
-			yield(get_tree().create_timer(specialCooldown), "timeout")
-			canAttack = true
-			print("Can special attack now.")
+	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Up":
+		print("Up Attack!")
+		canAttack = false
+		moveSpeed = 0
+		yield(get_tree().create_timer(attackCooldown), "timeout")
+		moveSpeed = 60
+		canAttack = true
+		print("Can attack now.")
+	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Left":
+		print("Left Attack!")
+		canAttack = false
+		moveSpeed = 0
+		yield(get_tree().create_timer(attackCooldown), "timeout")
+		moveSpeed = 60
+		canAttack = true
+		print("Can attack now.")
+	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Right":
+		print("Right Attack!")
+		canAttack = false
+		moveSpeed = 0
+		yield(get_tree().create_timer(attackCooldown), "timeout")
+		moveSpeed = 60
+		canAttack = true
+		print("Can attack now.")
+	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Down":
+		print("Down Attack!")
+		canAttack = false
+		moveSpeed = 0
+		yield(get_tree().create_timer(attackCooldown), "timeout")
+		moveSpeed = 60
+		canAttack = true
+		print("Can attack now.")
+	
+	#if Input.is_action_pressed("p" + str(playerNumber) + "A") and canAttack:
+	#	if Input.is_action_just_pressed("p" + str(playerNumber) + "Up"):
+	#		print("Up Attack!")
+	#		canAttack = false
+	#		yield(get_tree().create_timer(attackCooldown), "timeout")
+	#		canAttack = true
+	#		print("Can attack now.")
+	#	if Input.is_action_just_pressed("p" + str(playerNumber) + "Down"):
+	#		print("Down Attack!")
+	#		canAttack = false
+	#		yield(get_tree().create_timer(attackCooldown), "timeout")
+	#		canAttack = true
+	#		print("Can attack now.")
+	#	if Input.is_action_just_pressed("p" + str(playerNumber) + "Left"):
+	#		print("Left Attack!")
+	#		canAttack = false
+	#		yield(get_tree().create_timer(attackCooldown), "timeout")
+	#		canAttack = true
+	#		print("Can attack now.")
+	#	if Input.is_action_just_pressed("p" + str(playerNumber) + "Right"):
+	#		print("Right Attack!")
+	#		canAttack = false
+	#		yield(get_tree().create_timer(attackCooldown), "timeout")
+	#		canAttack = true
+	#		print("Can attack now.")
+	
+	#if Input.is_action_pressed("p" + str(playerNumber) + "B") and canAttack:
+		#if Input.is_action_just_pressed("p" + str(playerNumber) + "Up"):
+			#print("Up Special!")
+			#canAttack = false
+			#yield(get_tree().create_timer(specialCooldown), "timeout")
+			#canAttack = true
+			#print("Can special attack now.")
+		#if Input.is_action_just_pressed("p" + str(playerNumber) + "Down"):
+		#	print("Down Special!")
+		#	canAttack = false
+		#	yield(get_tree().create_timer(specialCooldown), "timeout")
+		#	canAttack = true
+		#	print("Can special attack now.")
+		#if Input.is_action_just_pressed("p" + str(playerNumber) + "Left"):
+		#	print("Left Special!")
+		#	canAttack = false
+		#	yield(get_tree().create_timer(specialCooldown), "timeout")
+		#	canAttack = true
+		#	print("Can special attack now.")
+		#if Input.is_action_just_pressed("p" + str(playerNumber) + "Right"):
+		#	print("Right Special!")
+		#	canAttack = false
+		#	yield(get_tree().create_timer(specialCooldown), "timeout")
+		#	canAttack = true
+		#	print("Can special attack now.")

@@ -4,7 +4,7 @@
 [ext_resource path="res://Scripts/playerController.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 24, 24 )
+extents = Vector2( 9.27731, 24 )
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
@@ -38,8 +38,10 @@ animations = [ {
 script = ExtResource( 2 )
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2( -1.9865, 0.397297 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 7 )
+frame = 1
 playing = true
