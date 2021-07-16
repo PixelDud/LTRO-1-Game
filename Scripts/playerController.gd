@@ -6,7 +6,7 @@ export var flipSprite = false
 export var playerNumber = 0
 export var health = 200
 export var moveSpeed = 60
-export var backSpeed = 30
+export var backSpeed = 15
 export var forwardsDashDefault = 50
 export var backDashDefault = 25
 var forwardsDash = forwardsDashDefault
@@ -49,7 +49,7 @@ func _physics_process(_delta):
 	$Sprite.flip_h = flipSprite
 	
 	getHitCheck()
-	
+	animation_handler()
 	movement_input()
 #	dash_input()
 	attackCheck()
@@ -66,7 +66,7 @@ func _physics_process(_delta):
 
 func movement_input():
 	if canAttack:
-		sprite.animation = "default"
+		#sprite.animation = "idle"
 		hurtbox.position.x = 0.118 
 		hurtbox.position.y = -1.006
 		hurtbox.shape.extents = Vector2(9,24)
@@ -104,8 +104,21 @@ func movement_input():
 			velocity.x += moveSpeed
 			block = "not"
 	else:
-		attackDir = "Right"
 		velocity.x = 0
+
+func animation_handler():
+	if Input.is_action_pressed("p" + str(playerNumber) + "Left"):
+		if (playerNumber == 2):
+			$Sprite.play("walk")
+		else:
+			$Sprite.play("shuffle")
+	elif Input.is_action_pressed("p" + str(playerNumber) + "Right"):
+		if (playerNumber == 2):
+			$Sprite.play("shuffle")
+		else:
+			$Sprite.play("walk")
+	else:
+		$Sprite.play("idle")
 
 #func dash_input():
 #	if Input.is_action_just_pressed("p" + str(playerNumber) + "Right") :
@@ -158,15 +171,14 @@ func movement_input():
 #		isDashing = false
 #		backDash = backDashDefault
 #	leftDash = 0
+
 func _on_Collision_area_entered(area):
 	print("enter")
 
 func getHitCheck():
-	
 	pass
 	
 func attackCheck():
-	
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Up":
 		print("Up Attack!")
 		canAttack = false
@@ -188,17 +200,17 @@ func attackCheck():
 		canAttack = false
 		moveSpeed = 0
 		sprite.animation = "forwardkick"
-		print("startup")
+		print("Startup...")
 		position.x += 5
 		forwardKickBox.hide()
 		yield(get_tree().create_timer(0.23333), "timeout")
 		forwardKickBox.show()
 		moveBoxes = true
-		print("hitboxes")
+		print("Hitboxes.")
 		position.x += 5
 		yield(get_tree().create_timer(0.008333), "timeout")
 		forwardKickBox.hide()
-		print("recovering")
+		print("Recovering...")
 		recovery = true
 		moveBoxes = false
 		position.x +=3
@@ -212,14 +224,14 @@ func attackCheck():
 		canAttack = false
 		moveSpeed = 0
 		sprite.animation = "lowkick"
-		print("startup")
+		print("Startup...")
 		lowKickBox.hide()
 		yield(get_tree().create_timer(0.1), "timeout")
 		lowKickBox.show()
 		moveBoxes = true
 		yield(get_tree().create_timer(0.05), "timeout")
 		lowKickBox.hide()
-		print("recovering")
+		print("Recovering...")
 		recovery = true
 		moveBoxes = false
 		yield(get_tree().create_timer(0.1), "timeout")
@@ -227,8 +239,6 @@ func attackCheck():
 		moveSpeed = 60
 		canAttack = true
 		print("Can attack now.")
-		
-	
 	
 	#if Input.is_action_pressed("p" + str(playerNumber) + "A") and canAttack:
 	#	if Input.is_action_just_pressed("p" + str(playerNumber) + "Up"):
@@ -281,3 +291,7 @@ func attackCheck():
 		#	yield(get_tree().create_timer(specialCooldown), "timeout")
 		#	canAttack = true
 		#	print("Can special attack now.")
+
+
+func _on_CollisionChecker_body_entered(body):
+	pass # Replace with function body.

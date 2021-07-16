@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/lojamidle1-Sheet.png-55aafc4baef872bef2a0be17d4f2ad42.stex"
+path="res://.import/bot1_idle.png-541f6a8df179fa8859d5c7322700255b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Images/Players/lojamidle1-Sheet.png"
-dest_files=[ "res://.import/lojamidle1-Sheet.png-55aafc4baef872bef2a0be17d4f2ad42.stex" ]
+source_file="res://Assets/Images/Players/bot1_idle.png"
+dest_files=[ "res://.import/bot1_idle.png-541f6a8df179fa8859d5c7322700255b.stex" ]
 
 [params]
 
