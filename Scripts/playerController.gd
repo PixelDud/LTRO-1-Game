@@ -62,7 +62,7 @@ func _physics_process(_delta):
 		health -= 5
 	
 	velocity = velocity.normalized() * moveSpeed
-	velocity = move_and_slide(velocity, Vector2.UP)
+	velocity = move_and_slide(velocity, Vector2.DOWN)
 
 func movement_input():
 	if canAttack:
@@ -97,12 +97,12 @@ func movement_input():
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Right"):
 		print("Right!")
 		attackDir = "Right"
-		if (playerNumber == 2):
-			velocity.x += backSpeed
-			block = "Standing"
-		else:
+		if (playerNumber == 1):
 			velocity.x += moveSpeed
 			block = "not"
+		else:
+			velocity.x += backSpeed
+			block = "Standing"
 	else:
 		velocity.x = 0
 
@@ -172,6 +172,9 @@ func animation_handler():
 #		backDash = backDashDefault
 #	leftDash = 0
 
+#stats
+#damage: down a = 20, forward a = 25, back a = 15 + 15, up a = 40
+
 func _on_Collision_area_entered(area):
 	print("enter")
 
@@ -183,7 +186,20 @@ func attackCheck():
 		print("Up Attack!")
 		canAttack = false
 		moveSpeed = 0
-		yield(get_tree().create_timer(attackCooldown), "timeout")
+		print("Startup...")
+		position.x += -3
+		yield(get_tree().create_timer(0.36666667), "timeout")
+		print("Hitbox...")
+		position.x += 25
+		moveBoxes = true
+		yield(get_tree().create_timer(0.05), "timeout")
+		moveBoxes = false
+		recovery = true
+		print("Recovery")
+		position.x += 4
+		yield(get_tree().create_timer(0.25), "timeout")
+		recovery = false
+		position.x += 1
 		moveSpeed = 60
 		canAttack = true
 		print("Can attack now.")
@@ -191,7 +207,17 @@ func attackCheck():
 		print("Left Attack!")
 		canAttack = false
 		moveSpeed = 0
-		yield(get_tree().create_timer(attackCooldown), "timeout")
+		print("Startup...")
+		yield(get_tree().create_timer(0.20), "timeout")
+		print ("Hitboxes")
+		moveBoxes = true
+		yield(get_tree().create_timer(0.03333), "timeout")
+		print("Hitboxes, again")
+		yield(get_tree().create_timer(0.03333), "timeout")
+		print("Recovering...")
+		recovery = true
+		moveBoxes = false
+		yield(get_tree().create_timer(0.1833333), "timeout")
 		moveSpeed = 60
 		canAttack = true
 		print("Can attack now.")
@@ -203,7 +229,7 @@ func attackCheck():
 		print("Startup...")
 		position.x += 5
 		forwardKickBox.hide()
-		yield(get_tree().create_timer(0.23333), "timeout")
+		yield(get_tree().create_timer(0.1833333), "timeout")
 		forwardKickBox.show()
 		moveBoxes = true
 		print("Hitboxes.")
@@ -214,7 +240,7 @@ func attackCheck():
 		recovery = true
 		moveBoxes = false
 		position.x +=3
-		yield(get_tree().create_timer(0.2), "timeout")
+		yield(get_tree().create_timer(0.183333), "timeout")
 		recovery = false
 		moveSpeed = 60
 		canAttack = true
