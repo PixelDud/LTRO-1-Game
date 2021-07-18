@@ -175,12 +175,9 @@ func animation_handler():
 #stats
 #damage: down a = 20, forward a = 25, back a = 15 + 15, up a = 40
 
-func _on_Collision_area_entered(area):
-	print("enter")
-
 func getHitCheck():
 	pass
-	
+
 func attackCheck():
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Up":
 		print("Up Attack!")
@@ -318,6 +315,9 @@ func attackCheck():
 		#	canAttack = true
 		#	print("Can special attack now.")
 
-
-func _on_CollisionChecker_body_entered(body):
-	pass # Replace with function body.
+func _on_HitBoxes_area_entered(body):
+	if body.is_in_group("Player"):
+		print(body.get_owner().playerNumber)
+		body.get_owner().health -= 5
+	else:
+		print("Collision!")
