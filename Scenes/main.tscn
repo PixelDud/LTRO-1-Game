@@ -38,6 +38,7 @@ margin_top = 8.0
 margin_right = 56.0
 margin_bottom = 16.0
 custom_styles/fg = SubResource( 2 )
+max_value = 200.0
 percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -49,6 +50,7 @@ margin_top = 8.0
 margin_right = 232.0
 margin_bottom = 16.0
 custom_styles/fg = SubResource( 2 )
+max_value = 200.0
 percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false

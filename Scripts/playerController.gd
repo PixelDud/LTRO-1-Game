@@ -5,8 +5,8 @@ var velocity = Vector2.ZERO
 export var flipSprite = false
 export var playerNumber = 0
 export var health = 200
-export var moveSpeed = 60
-export var backSpeed = 15
+export var moveSpeed = 1
+export var backSpeed = 2
 export var forwardsDashDefault = 50
 export var backDashDefault = 25
 var forwardsDash = forwardsDashDefault
@@ -27,6 +27,7 @@ var block = "not"
 var moveBoxes = false
 var recovery = false
 var hitType = "nothing"
+var hitStun = 0
 #hitType is for deciding whether a move hits low, medium, or high
 #moveBoxes is for when a move has its hitboxes active
 #recovery is when you are recovering from doing a move
@@ -50,9 +51,13 @@ func _physics_process(_delta):
 	
 	getHitCheck()
 	animation_handler()
-	movement_input()
-#	dash_input()
-	attackCheck()
+	if hitStun == 0:
+		movement_input()
+#		dash_input()
+		attackCheck()
+	if hitStun >= 1:
+		hitStun -= 1
+		$Sprite.animation = "takehit"
 	healthBar.value = health
 	
 	if (healthBar.value <= 0):
@@ -60,8 +65,8 @@ func _physics_process(_delta):
 	
 	if Input.is_action_just_pressed("ui_focus_next"):
 		health -= 5
+		hitStun += 10
 	
-	velocity = velocity.normalized() * moveSpeed
 	velocity = move_and_slide(velocity, Vector2.DOWN)
 
 func movement_input():
@@ -73,11 +78,9 @@ func movement_input():
 	if Input.is_action_pressed("p" + str(playerNumber) + "Up"):
 		print("Up!")
 		attackDir = "Up"
-		velocity.x = 0 
 		block = "not"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Down"):
 		print("Down!")
-		velocity.x = 0
 		attackDir = "Down"
 		block = "Down"
 		if canAttack:
@@ -89,23 +92,22 @@ func movement_input():
 		print("Left!")
 		attackDir = "Left"
 		if (playerNumber == 2):
-			velocity.x -= moveSpeed
+			position.x -= moveSpeed 
 			block = "not"
 		else:
-			velocity.x -= backSpeed
+			position.x -= backSpeed * 0.3
 			block = "Standing"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Right"):
 		print("Right!")
 		attackDir = "Right"
 		if (playerNumber == 1):
-			velocity.x += moveSpeed
+			position.x += moveSpeed
 			block = "not"
 		else:
-			velocity.x += backSpeed
+			position.x += backSpeed * 0.3
 			block = "Standing"
 	else:
-		velocity.x = 0
-
+		pass
 func animation_handler():
 	if Input.is_action_pressed("p" + str(playerNumber) + "Left"):
 		if (playerNumber == 2):
@@ -185,27 +187,30 @@ func attackCheck():
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Up":
 		print("Up Attack!")
 		canAttack = false
+		backSpeed = 0
 		moveSpeed = 0
 		print("Startup...")
 		position.x += -3
 		yield(get_tree().create_timer(0.36666667), "timeout")
 		print("Hitbox...")
-		position.x += 25
+		velocity.x += 300
 		moveBoxes = true
 		yield(get_tree().create_timer(0.05), "timeout")
 		moveBoxes = false
 		recovery = true
 		print("Recovery")
-		position.x += 4
+		velocity.x -= 250
 		yield(get_tree().create_timer(0.25), "timeout")
 		recovery = false
-		position.x += 1
-		moveSpeed = 60
+		velocity.x = 0
+		backSpeed = 2
+		moveSpeed = 1
 		canAttack = true
 		print("Can attack now.")
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Left":
 		print("Left Attack!")
 		canAttack = false
+		backSpeed = 0
 		moveSpeed = 0
 		print("Startup...")
 		yield(get_tree().create_timer(0.20), "timeout")
@@ -218,36 +223,40 @@ func attackCheck():
 		recovery = true
 		moveBoxes = false
 		yield(get_tree().create_timer(0.1833333), "timeout")
-		moveSpeed = 60
+		backSpeed = 2
+		moveSpeed = 1
 		canAttack = true
 		print("Can attack now.")
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Right":
 		print("Right Attack!")
 		canAttack = false
 		moveSpeed = 0
-		sprite.animation = "forwardkick"
+		backSpeed = 0
 		print("Startup...")
-		position.x += 5
+		position.x += 1
 		forwardKickBox.hide()
 		yield(get_tree().create_timer(0.1833333), "timeout")
 		forwardKickBox.show()
 		moveBoxes = true
 		print("Hitboxes.")
-		position.x += 5
+		velocity.x += 20
 		yield(get_tree().create_timer(0.008333), "timeout")
 		forwardKickBox.hide()
 		print("Recovering...")
 		recovery = true
 		moveBoxes = false
-		position.x +=3
+		velocity.x += 10
 		yield(get_tree().create_timer(0.183333), "timeout")
 		recovery = false
-		moveSpeed = 60
+		velocity.x = 0
+		backSpeed = 2
+		moveSpeed = 1
 		canAttack = true
 		print("Can attack now.")
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Down":
 		print("Down Attack!")
 		canAttack = false
+		backSpeed = 0
 		moveSpeed = 0
 		sprite.animation = "lowkick"
 		print("Startup...")
@@ -261,8 +270,10 @@ func attackCheck():
 		recovery = true
 		moveBoxes = false
 		yield(get_tree().create_timer(0.1), "timeout")
+		velocity.x = 0
 		recovery = false
-		moveSpeed = 60
+		backSpeed = 2
+		moveSpeed = 1
 		canAttack = true
 		print("Can attack now.")
 	
