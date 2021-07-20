@@ -18,12 +18,10 @@ var leftDash = 0
 var canDash = true
 var isDashing = false
 var inputTimeout = 0.5
-var attackCooldown = 0.332
-var specialCooldown = 0.332
-var dashCooldown = 0.7
 var canAttack = true
 var attackDir = "right"
-var block = "not"
+var p1block = "not"
+var p2block = "not"
 var hitType = "nothing"
 var recovery = false
 var hitStun = 0
@@ -43,6 +41,8 @@ onready var healthBar = get_parent().get_node("p" + str(playerNumber) + "Health"
 onready var dashAudioCue = $dashAudioCue
 
 func _physics_process(_delta):
+	print(p2block)
+	print(p1block)
 	if playerNumber == 1:
 		enemy = get_tree().get_root().get_node("World/Viewport/Player2")
 	else:
@@ -70,37 +70,45 @@ func _physics_process(_delta):
 	velocity = move_and_slide(velocity, Vector2.DOWN)
 
 func movement_input():
+	p1block = "not"
+	p2block = "not"
 	if canAttack:
 		#sprite.animation = "idle"
 		pass
 	if Input.is_action_pressed("p" + str(playerNumber) + "Up"):
 #		print("Up!")
 		attackDir = "Up"
-		block = "not"
+		if playerNumber == 1:
+			p1block = "not"
+		else:
+			p2block = "not"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Down"):
 #		print("Down!")
 		attackDir = "Down"
-		block = "Down"
+		if playerNumber == 2:
+			p2block = "Down"
+		if playerNumber == 1:
+			p1block = "Down"
 		if canAttack:
-			sprite.animation = "block"
+			sprite.animation = "cblock"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Left"):
 #		print("Left!")
 		attackDir = "Left"
 		if (playerNumber == 2):
 			position.x -= moveSpeed 
-			block = "not"
+			p2block = "not"
 		else:
 			position.x -= backSpeed * 0.3
-			block = "Standing"
+			p1block = "Standing"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Right"):
 #		print("Right!")
 		attackDir = "Right"
 		if (playerNumber == 1):
 			position.x += moveSpeed
-			block = "not"
+			p1block = "not"
 		else:
 			position.x += backSpeed * 0.3
-			block = "Standing"
+			p2block = "Standing"
 	else:
 		pass
 func animation_handler():
@@ -114,6 +122,8 @@ func animation_handler():
 			$Sprite.play("shuffle")
 		else:
 			$Sprite.play("walk")
+	
+	
 	else:
 		$Sprite.play("idle")
 
@@ -238,7 +248,6 @@ func attackCheck():
 		canAttack = false
 		backSpeed = 0
 		moveSpeed = 0
-		sprite.animation = "lowkick"
 		print("Startup...")
 		yield(get_tree().create_timer(0.1), "timeout")
 		attack("lowkick")
@@ -304,14 +313,19 @@ func attackCheck():
 		#	yield(get_tree().create_timer(specialCooldown), "timeout")
 		#	canAttack = true
 		#	print("Can special attack now.")
-
+#("p" + str(playerNumber) + "block")
 func attack(type):
 	if playerNumber == 1:
 		match type:
 			"lowkick":
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
-					enemy.health -= 5
+					if p2block == "Down":
+						enemy.health -= 2
+						enemy.hitStun += 12
+					else:
+						enemy.health -= 20
+						enemy.hitStun += 13
 			"elbow":
 				enemy.health -= 5
 			"kick":
@@ -323,7 +337,12 @@ func attack(type):
 			"lowkick":
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
-					enemy.health -= 5
+					if p1block == "Down":
+						enemy.health -= 2
+						enemy.hitStun += 12
+					else:
+						enemy.health -= 20
+						enemy.hitStun += 23
 			"elbow":
 				enemy.health -= 5
 			"kick":

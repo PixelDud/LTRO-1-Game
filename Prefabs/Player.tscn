@@ -1,7 +1,8 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Assets/Images/Players/bot1_backwards_shuffle.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/playerController.gd" type="Script" id=2]
+[ext_resource path="res://Assets/Images/Players/bot1_crouch.png" type="Texture" id=3]
 [ext_resource path="res://Assets/Images/Players/lowkick-Sheet.png" type="Texture" id=4]
 [ext_resource path="res://Assets/Images/Players/forwardkick-Sheet.png" type="Texture" id=5]
 [ext_resource path="res://Assets/Images/Players/bot1_forward_walk.png" type="Texture" id=6]
@@ -75,7 +76,11 @@ region = Rect2( 144, 0, 48, 48 )
 atlas = ExtResource( 5 )
 region = Rect2( 192, 0, 48, 48 )
 
-[sub_resource type="SpriteFrames" id=18]
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="SpriteFrames" id=19]
 animations = [ {
 "frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
 "loop": true,
@@ -111,6 +116,11 @@ animations = [ {
 "loop": true,
 "name": "takehit",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 18 ) ],
+"loop": true,
+"name": "cblock",
+"speed": 5.0
 } ]
 
 [node name="Player" type="KinematicBody2D"]
@@ -123,8 +133,8 @@ position = Vector2( 32, 0 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
-frames = SubResource( 18 )
-animation = "takehit"
+frames = SubResource( 19 )
+animation = "cblock"
 playing = true
 __meta__ = {
 "_edit_lock_": true
