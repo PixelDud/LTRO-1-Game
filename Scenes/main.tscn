@@ -1,10 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Prefabs/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Images/Backgrounds/template.png" type="Texture" id=2]
 [ext_resource path="res://Scenes/pauseMenu.tscn" type="PackedScene" id=3]
-
-[sub_resource type="RectangleShape2D" id=1]
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.737255, 0.196078, 0.196078, 1 )
@@ -25,13 +23,6 @@ render_target_v_flip = true
 texture = ExtResource( 2 )
 centered = false
 
-[node name="hitBoxTesting" type="Area2D" parent="Viewport"]
-position = Vector2( 120.609, 110.1 )
-
-[node name="hitBox" type="CollisionShape2D" parent="Viewport/hitBoxTesting"]
-position = Vector2( -0.609001, -6.1 )
-shape = SubResource( 1 )
-
 [node name="p1Health" type="ProgressBar" parent="Viewport"]
 margin_left = 8.0
 margin_top = 8.0
@@ -45,10 +36,11 @@ __meta__ = {
 }
 
 [node name="p2Health" type="ProgressBar" parent="Viewport"]
-margin_left = 184.0
-margin_top = 8.0
-margin_right = 232.0
-margin_bottom = 16.0
+margin_left = 232.0
+margin_top = 16.0
+margin_right = 280.0
+margin_bottom = 24.0
+rect_rotation = 180.0
 custom_styles/fg = SubResource( 2 )
 max_value = 200.0
 percent_visible = false
@@ -59,7 +51,7 @@ __meta__ = {
 [node name="Border" type="StaticBody2D" parent="Viewport"]
 
 [node name="Collision" type="CollisionPolygon2D" parent="Viewport/Border"]
-polygon = PoolVector2Array( 0, 0, 0, 136, 240, 136, 240, 0, 0, 0, -8, -8, 248, -8, 248, 144, -8, 144, -8, -8 )
+polygon = PoolVector2Array( 0, 0, 0, 135, 240, 135, 240, 0, 0, 0, -8, -8, 248, -8, 248, 143, -8, 143, -8, -8 )
 
 [node name="Player" parent="Viewport" instance=ExtResource( 1 )]
 position = Vector2( 32, 104 )
