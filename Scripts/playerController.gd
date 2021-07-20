@@ -322,7 +322,7 @@ func attack(type):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if p2block == "Down":
 						enemy.health -= 2
-						enemy.hitStun += 12
+						enemy.hitStun += 11
 					else:
 						enemy.health -= 20
 						enemy.hitStun += 13
