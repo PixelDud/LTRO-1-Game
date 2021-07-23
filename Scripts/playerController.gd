@@ -7,24 +7,13 @@ export var playerNumber = 0
 export var health = 200
 export var moveSpeed = 1
 export var backSpeed = 2
-export var forwardsDashDefault = 50
-export var backDashDefault = 25
-var forwardsDash = forwardsDashDefault
-var backDash = backDashDefault
-var rightDashDir = Vector2(1,0)
-var leftDashDir = Vector2(-1,0)
-var rightDash = 0
-var leftDash = 0
-var canDash = true
-var isDashing = false
-var inputTimeout = 0.5
 var canAttack = true
 var attackDir = "right"
 var block = "not"
-var hitType = "nothing"
 var recovery = false
 var hitStun = 0
 var enemy = null
+
 #hitType is for deciding whether a move hits low, medium, or high
 #recovery is when you are recovering from doing a move
 
@@ -51,7 +40,7 @@ func _physics_process(_delta):
 	animation_handler()
 	if hitStun == 0:
 		movement_input()
-#		dash_input()
+#	
 		attackCheck()
 	if hitStun >= 1:
 		hitStun -= 1
@@ -181,6 +170,8 @@ func attack(type):
 					else:
 						enemy.health -= 25
 						enemy.hitStun += 14
+			"fireball":
+				pass
 	else:
 		match type:
 			"lowkick":
@@ -196,10 +187,12 @@ func attack(type):
 			
 			"punch":
 				block = "Standing"
-				if (abs(enemy.position.x - position.x) <= 100):
+				if (abs(enemy.position.x - position.x) <= 60):
 					if block == "Standing":
 						enemy.health -= 7
 						enemy.hitStun += 6
 					else:
 						enemy.health -= 25
 						enemy.hitStun += 14
+			"fireball":
+				pass

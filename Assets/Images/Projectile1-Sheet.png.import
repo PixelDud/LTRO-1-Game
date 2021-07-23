@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/BG FOR MAIN FIGHT.png-3928c3e6feea88b82587593763abd1b7.stex"
+path="res://.import/Projectile1-Sheet.png-6bbe96ab5f9f91ee3b436f8326b1ba02.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://BG FOR MAIN FIGHT.png"
-dest_files=[ "res://.import/BG FOR MAIN FIGHT.png-3928c3e6feea88b82587593763abd1b7.stex" ]
+source_file="res://Assets/Images/Projectile1-Sheet.png"
+dest_files=[ "res://.import/Projectile1-Sheet.png-6bbe96ab5f9f91ee3b436f8326b1ba02.stex" ]
 
 [params]
 
