@@ -187,7 +187,7 @@ func attack(type):
 					else:
 						hitSound.play()
 						enemy.health -= 20 * damageMult
-						enemy.hitStun += 30
+						enemy.hitStun += 26
 						enemy.position.x += 9
 			"punch":
 				
@@ -216,7 +216,7 @@ func attack(type):
 					else:
 						hitSound.play()
 						enemy.health -= 15 * damageMult
-						enemy.hitStun += 30
+						enemy.hitStun += 26
 						enemy.position.x += -9
 			
 			"punch":
