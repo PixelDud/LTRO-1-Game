@@ -154,7 +154,7 @@ func attack(type):
 				block = "Standing"
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
-					if block == "Standing":
+					if enemy.block == "Standing":
 						enemy.health -= 4
 						enemy.hitStun += 11
 					else:
