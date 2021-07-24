@@ -182,12 +182,6 @@ animations = [ {
 
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 2 )
-playerNumber = null
-health = null
-moveSpeed = null
-backSpeed = null
-forwardsDashDefault = null
-backDashDefault = null
 
 [node name="Position2D" type="Position2D" parent="."]
 position = Vector2( 32, 0 )

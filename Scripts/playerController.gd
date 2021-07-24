@@ -182,7 +182,7 @@ func attackCheck():
 func attack(type):
 	if playerNumber == 1:
 		match type:
-			"lowkick":
+			"kick":
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if enemy.block == "Standing":
@@ -191,9 +191,15 @@ func attack(type):
 						enemy.position.x += 3
 					else:
 						hitSound.play()
-						enemy.health -= 20 * damageMult
+
+						enemy.health -= 15 * damageMult
 						enemy.hitStun += 26
 						enemy.position.x += 9
+
+						enemy.health -= 20 * damageMult
+						enemy.hitStun += 20
+						enemy.position.x += 13
+
 			"punch":
 				if (abs(enemy.position.x - position.x) <= 48):
 					if enemy.block == "Standing":
@@ -209,29 +215,29 @@ func attack(type):
 				pass
 	else:
 		match type:
-			"lowkick":
+			"kick":
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if enemy.block == "Standing":
 						enemy.health -= 4 * damageMult
 						enemy.hitStun += 5
-						enemy.position.x += -3
+						enemy.position.x -= 3
 					else:
 						hitSound.play()
 						enemy.health -= 15 * damageMult
-						enemy.hitStun += 26
-						enemy.position.x += -9
-			
+						enemy.hitStun += 20
+						enemy.position.x -= 13
+
 			"punch":
-				if (abs(enemy.position.x - position.x) <= 60):
+				if (abs(enemy.position.x - position.x) <= 48):
 					if enemy.block == "Standing":
 						enemy.health -= 7 * damageMult
 						enemy.hitStun += 6
-						enemy.position.x += -3
+						enemy.position.x -= 3
 					else:
 						hitSound.play()
-						enemy.health -= 20 * damageMult
+						enemy.health -= 25 * damageMult
 						enemy.hitStun += 14
-						enemy.position.x += -10
+						enemy.position.x -= 10
 			"fireball":
 				pass
