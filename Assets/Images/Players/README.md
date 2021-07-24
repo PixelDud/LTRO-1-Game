@@ -1,1 +1,0 @@
-Player animations are to be stored as `.gif` files.

@@ -1,1 +1,0 @@
-Backgrounds are to use the included template and the palette within. Save as `.png`.

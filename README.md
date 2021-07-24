@@ -1,1 +1,0 @@
-This is the official repo for the Ours Not Mine Lospec Game Jam submission.
