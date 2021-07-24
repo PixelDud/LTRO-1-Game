@@ -65,10 +65,7 @@ func _physics_process(_delta):
 func movement_input():
 	block = "not"
 	
-
 	if Input.is_action_pressed("p" + str(playerNumber) + "Left"):
-#		print("Left!")
-		
 		if (playerNumber == 2):
 			position.x -= moveSpeed 
 			block = "not"
@@ -78,8 +75,6 @@ func movement_input():
 			block = "Standing"
 			attackDir = "Left"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Right"):
-#		print("Right!")
-		
 		if (playerNumber == 1):
 			position.x += moveSpeed
 			block = "not"
@@ -90,8 +85,8 @@ func movement_input():
 			attackDir = "Right"
 	else:
 		pass
+
 func animation_handler():
-	
 	if Input.is_action_pressed("p" + str(playerNumber) + "Left") and canAttack == true:
 		if (playerNumber == 2):
 			$Sprite.play("walk")
@@ -118,66 +113,61 @@ func animation_handler():
 		if canAttack == true:
 			$Sprite.play("idle")
 
-
 #stats
 #damage: down a = 20, forward a = 25, back a = 15 + 15, up a = 40
 
 func attackCheck():
-	
-	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Right":
-		print("Right Attack!")
-		
-		canAttack = false
-		moveSpeed = 0
-		backSpeed = 0
-		print("Startup...")
-		position.x += 1
-		yield(get_tree().create_timer(0.1833333), "timeout")
-		print("Hitboxes.")
-		if playerNumber == 2:
-			velocity.x += -20
-		else:
-			velocity.x += 20
-		attack("punch")
-		yield(get_tree().create_timer(0.008333), "timeout")
-		print("Recovering...")
-		recovery = true
-		if playerNumber == 2:
-			velocity.x += -10
-		else:
-			velocity.x += 10
-		yield(get_tree().create_timer(0.183333), "timeout")
-		recovery = false
-		velocity.x = 0
-		backSpeed = 2
-		moveSpeed = 1
-		canAttack = true
-		print("Can attack now.")
-	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Left":
-		
-		print("Left Attack!")
-		canAttack = false
-		backSpeed = 0
-		moveSpeed = 0
-		print("Startup...")
-		yield(get_tree().create_timer(0.1), "timeout")
-		attack("lowkick")
-		yield(get_tree().create_timer(0.05), "timeout")
-		print("Recovering...")
-		recovery = true
-		yield(get_tree().create_timer(0.1), "timeout")
-		velocity.x = 0
-		recovery = false
-		backSpeed = 2
-		moveSpeed = 1
-		canAttack = true
-		print("Can attack now.")
+	if Input.is_action_pressed("p" + str(playerNumber) + "A"):
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "Right") and canAttack:
+			print("Right Attack!")
+			canAttack = false
+			moveSpeed = 0
+			backSpeed = 0
+			print("Startup...")
+			position.x += 1
+			yield(get_tree().create_timer(0.1833333), "timeout")
+			if playerNumber == 2:
+				velocity.x += -20
+			else:
+				velocity.x += 20
+			attack("punch")
+			yield(get_tree().create_timer(0.008333), "timeout")
+			print("Recovering...")
+			recovery = true
+			if playerNumber == 2:
+				velocity.x += -10
+			else:
+				velocity.x += 10
+			yield(get_tree().create_timer(0.183333), "timeout")
+			recovery = false
+			velocity.x = 0
+			backSpeed = 2
+			moveSpeed = 1
+			canAttack = true
+			print("Can attack now.")
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "Left") and canAttack:
+			print("Left Attack!")
+			canAttack = false
+			backSpeed = 0
+			moveSpeed = 0
+			print("Startup...")
+			yield(get_tree().create_timer(0.1), "timeout")
+			attack("lowkick")
+			yield(get_tree().create_timer(0.05), "timeout")
+			print("Recovering...")
+			recovery = true
+			yield(get_tree().create_timer(0.1), "timeout")
+			velocity.x = 0
+			recovery = false
+			backSpeed = 2
+			moveSpeed = 1
+			canAttack = true
+			print("Can attack now.")
 	
 func attack(type):
 	if playerNumber == 1:
 		match type:
 			"lowkick":
-				
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if enemy.block == "Standing":
@@ -190,7 +180,6 @@ func attack(type):
 						enemy.hitStun += 26
 						enemy.position.x += 9
 			"punch":
-				
 				if (abs(enemy.position.x - position.x) <= 48):
 					if enemy.block == "Standing":
 						enemy.health -= 7 * damageMult
@@ -206,7 +195,6 @@ func attack(type):
 	else:
 		match type:
 			"lowkick":
-				
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if enemy.block == "Standing":
@@ -220,7 +208,6 @@ func attack(type):
 						enemy.position.x += -9
 			
 			"punch":
-				
 				if (abs(enemy.position.x - position.x) <= 60):
 					if enemy.block == "Standing":
 						enemy.health -= 7 * damageMult
