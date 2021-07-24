@@ -117,52 +117,51 @@ func animation_handler():
 #damage: down a = 20, forward a = 25, back a = 15 + 15, up a = 40
 
 func attackCheck():
-	if Input.is_action_pressed("p" + str(playerNumber) + "A"):
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "Right") and canAttack:
-			print("Right Attack!")
-			canAttack = false
-			moveSpeed = 0
-			backSpeed = 0
-			print("Startup...")
-			position.x += 1
-			yield(get_tree().create_timer(0.1833333), "timeout")
-			if playerNumber == 2:
-				velocity.x += -20
-			else:
-				velocity.x += 20
-			attack("punch")
-			yield(get_tree().create_timer(0.008333), "timeout")
-			print("Recovering...")
-			recovery = true
-			if playerNumber == 2:
-				velocity.x += -10
-			else:
-				velocity.x += 10
-			yield(get_tree().create_timer(0.183333), "timeout")
-			recovery = false
-			velocity.x = 0
-			backSpeed = 2
-			moveSpeed = 1
-			canAttack = true
-			print("Can attack now.")
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "Left") and canAttack:
-			print("Left Attack!")
-			canAttack = false
-			backSpeed = 0
-			moveSpeed = 0
-			print("Startup...")
-			yield(get_tree().create_timer(0.1), "timeout")
-			attack("lowkick")
-			yield(get_tree().create_timer(0.05), "timeout")
-			print("Recovering...")
-			recovery = true
-			yield(get_tree().create_timer(0.1), "timeout")
-			velocity.x = 0
-			recovery = false
-			backSpeed = 2
-			moveSpeed = 1
-			canAttack = true
-			print("Can attack now.")
+	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack:
+		print("Right Attack!")
+		canAttack = false
+		moveSpeed = 0
+		backSpeed = 0
+		print("Startup...")
+		position.x += 1
+		yield(get_tree().create_timer(0.1833333), "timeout")
+		if playerNumber == 2:
+			velocity.x += -20
+		else:
+			velocity.x += 20
+		attack("punch")
+		yield(get_tree().create_timer(0.008333), "timeout")
+		print("Recovering...")
+		recovery = true
+		if playerNumber == 2:
+			velocity.x += -10
+		else:
+			velocity.x += 10
+		yield(get_tree().create_timer(0.183333), "timeout")
+		recovery = false
+		velocity.x = 0
+		backSpeed = 2
+		moveSpeed = 1
+		canAttack = true
+		print("Can attack now.")
+	if Input.is_action_just_pressed("p" + str(playerNumber) + "B") and canAttack:
+		print("Left Attack!")
+		canAttack = false
+		backSpeed = 0
+		moveSpeed = 0
+		print("Startup...")
+		yield(get_tree().create_timer(0.1), "timeout")
+		attack("lowkick")
+		yield(get_tree().create_timer(0.05), "timeout")
+		print("Recovering...")
+		recovery = true
+		yield(get_tree().create_timer(0.1), "timeout")
+		velocity.x = 0
+		recovery = false
+		backSpeed = 2
+		moveSpeed = 1
+		canAttack = true
+		print("Can attack now.")
 	
 func attack(type):
 	if playerNumber == 1:
