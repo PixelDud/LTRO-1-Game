@@ -14,7 +14,7 @@ var recovery = false
 var hitStun = 0
 var enemy = null
 var damageMult = 1
-
+onready var hitSound = $hitsoundeffecttest
 #hitType is for deciding whether a move hits low, medium, or high
 #recovery is when you are recovering from doing a move
 
@@ -183,19 +183,21 @@ func attack(type):
 					if enemy.block == "Standing":
 						enemy.health -= 4 * damageMult
 						enemy.hitStun += 5
-						enemy.position.x += 1
+						enemy.position.x += 3
 					else:
+						hitSound.play()
 						enemy.health -= 20 * damageMult
 						enemy.hitStun += 30
-						enemy.position.x += 7
+						enemy.position.x += 9
 			"punch":
 				
 				if (abs(enemy.position.x - position.x) <= 48):
-					if enemy.block == "Standidng":
+					if enemy.block == "Standing":
 						enemy.health -= 7 * damageMult
 						enemy.hitStun += 6
-						enemy.position.x += 1
+						enemy.position.x += 3
 					else:
+						hitSound.play()
 						enemy.health -= 25 * damageMult
 						enemy.hitStun += 14
 						enemy.position.x += 10
@@ -210,11 +212,12 @@ func attack(type):
 					if enemy.block == "Standing":
 						enemy.health -= 4 * damageMult
 						enemy.hitStun += 5
-						enemy.position.x += -1
+						enemy.position.x += -3
 					else:
+						hitSound.play()
 						enemy.health -= 15 * damageMult
 						enemy.hitStun += 30
-						enemy.position.x += -7
+						enemy.position.x += -9
 			
 			"punch":
 				
@@ -222,8 +225,9 @@ func attack(type):
 					if enemy.block == "Standing":
 						enemy.health -= 7 * damageMult
 						enemy.hitStun += 6
-						enemy.position.x += -1
+						enemy.position.x += -3
 					else:
+						hitSound.play()
 						enemy.health -= 20 * damageMult
 						enemy.hitStun += 14
 						enemy.position.x += -10

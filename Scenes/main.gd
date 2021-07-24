@@ -2,6 +2,7 @@ extends Node2D
 
 onready var player2hp = $Viewport/Player2
 onready var player1hp = $Viewport/Player
+onready var pleaseplay = $pleaseplay
 export var rounds = 2
 export var p1wins = 0
 export var p2wins = 0
@@ -12,7 +13,7 @@ func newround():
 	player2hp.health = 200
 	player1hp.position.x = 32
 	player2hp.position.x = 208
-	
+	pleaseplay.play()
 func _ready():
 	newround()
 		
