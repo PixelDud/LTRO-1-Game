@@ -96,8 +96,17 @@ func animation_handler():
 		else:
 			$Sprite.play("walk")
 	
-	
 	else:
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and attackDir == "Left":
+			if (playerNumber == 2):
+				$Sprite.play("punch")
+			else:
+				$Sprite.play("kick")
+		if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and attackDir == "Right":
+			if (playerNumber == 2):
+				$Sprite.play("kick")
+			else:
+				$Sprite.play("punch")
 		$Sprite.play("idle")
 
 
@@ -115,12 +124,18 @@ func attackCheck():
 		position.x += 1
 		yield(get_tree().create_timer(0.1833333), "timeout")
 		print("Hitboxes.")
-		velocity.x += 20
+		if playerNumber == 2:
+			velocity.x += -20
+		else:
+			velocity.x += 20
 		attack("punch")
 		yield(get_tree().create_timer(0.008333), "timeout")
 		print("Recovering...")
 		recovery = true
-		velocity.x += 10
+		if playerNumber == 2:
+			velocity.x += -10
+		else:
+			velocity.x += 10
 		yield(get_tree().create_timer(0.183333), "timeout")
 		recovery = false
 		velocity.x = 0
@@ -151,7 +166,7 @@ func attack(type):
 	if playerNumber == 1:
 		match type:
 			"lowkick":
-				block = "Standing"
+				
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if enemy.block == "Standing":
@@ -162,9 +177,9 @@ func attack(type):
 						enemy.hitStun += 13
 			
 			"punch":
-				block = "Standing"
+				
 				if (abs(enemy.position.x - position.x) <= 48):
-					if block == "Standing":
+					if enemy.block == "Standing":
 						enemy.health -= 7
 						enemy.hitStun += 6
 					else:
@@ -175,10 +190,10 @@ func attack(type):
 	else:
 		match type:
 			"lowkick":
-				block = "Standing"
+				
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
-					if block == "Standing":
+					if enemy.block == "Standing":
 						enemy.health -= 4
 						enemy.hitStun += 11
 					else:
@@ -186,9 +201,9 @@ func attack(type):
 						enemy.hitStun += 13
 			
 			"punch":
-				block = "Standing"
+				
 				if (abs(enemy.position.x - position.x) <= 60):
-					if block == "Standing":
+					if enemy.block == "Standing":
 						enemy.health -= 7
 						enemy.hitStun += 6
 					else:
