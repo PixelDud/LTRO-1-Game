@@ -13,6 +13,7 @@ var block = "not"
 var recovery = false
 var hitStun = 0
 var enemy = null
+var damageMult = 1
 
 #hitType is for deciding whether a move hits low, medium, or high
 #recovery is when you are recovering from doing a move
@@ -40,13 +41,13 @@ func _physics_process(_delta):
 	animation_handler()
 	if hitStun == 0:
 		movement_input()
-#	
+		damageMult = 1
 		attackCheck()
 	
 		
 	if hitStun >= 1:
 		hitStun -=1
-
+		damageMult = 0.7
 		$Sprite.play("takehit")
 			
 		
@@ -91,31 +92,31 @@ func movement_input():
 		pass
 func animation_handler():
 	
-	if Input.is_action_pressed("p" + str(playerNumber) + "Left"):
+	if Input.is_action_pressed("p" + str(playerNumber) + "Left") and canAttack == true:
 		if (playerNumber == 2):
 			$Sprite.play("walk")
 		else:
 			$Sprite.play("shuffle")
-	elif Input.is_action_pressed("p" + str(playerNumber) + "Right"):
+	elif Input.is_action_pressed("p" + str(playerNumber) + "Right") and canAttack == true:
 		if (playerNumber == 2):
 			$Sprite.play("shuffle")
 		else:
 			$Sprite.play("walk")
 	
 	else:
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and attackDir == "Left":
+		if Input.is_action_pressed("p" + str(playerNumber) + "A") and attackDir == "Left":
 			if (playerNumber == 2):
 				$Sprite.play("punch")
 			else:
 				$Sprite.play("kick")
-		if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and attackDir == "Right":
+		if Input.is_action_pressed("p" + str(playerNumber) + "A") and attackDir == "Right":
 			if (playerNumber == 2):
 				$Sprite.play("kick")
 			else:
 				$Sprite.play("punch")
 		
-		
-		$Sprite.play("idle")
+		if canAttack == true:
+			$Sprite.play("idle")
 
 
 #stats
@@ -125,6 +126,7 @@ func attackCheck():
 	
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Right":
 		print("Right Attack!")
+		
 		canAttack = false
 		moveSpeed = 0
 		backSpeed = 0
@@ -152,6 +154,7 @@ func attackCheck():
 		canAttack = true
 		print("Can attack now.")
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack and attackDir == "Left":
+		
 		print("Left Attack!")
 		canAttack = false
 		backSpeed = 0
@@ -178,24 +181,24 @@ func attack(type):
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if enemy.block == "Standing":
-						enemy.health -= 4
+						enemy.health -= 4 * damageMult
 						enemy.hitStun += 5
 						enemy.position.x += 1
 					else:
-						enemy.health -= 20
-						enemy.hitStun += 9
-						enemy.position.x += 2
+						enemy.health -= 20 * damageMult
+						enemy.hitStun += 30
+						enemy.position.x += 7
 			"punch":
 				
 				if (abs(enemy.position.x - position.x) <= 48):
-					if enemy.block == "Standing":
-						enemy.health -= 7
+					if enemy.block == "Standidng":
+						enemy.health -= 7 * damageMult
 						enemy.hitStun += 6
 						enemy.position.x += 1
 					else:
-						enemy.health -= 25
+						enemy.health -= 25 * damageMult
 						enemy.hitStun += 14
-						enemy.position.x += 3
+						enemy.position.x += 10
 			"fireball":
 				pass
 	else:
@@ -205,24 +208,24 @@ func attack(type):
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if enemy.block == "Standing":
-						enemy.health -= 4
+						enemy.health -= 4 * damageMult
 						enemy.hitStun += 5
-						enemy.position.x += 1
+						enemy.position.x += -1
 					else:
-						enemy.health -= 20
-						enemy.hitStun += 9
-						enemy.position.x += 2
+						enemy.health -= 15 * damageMult
+						enemy.hitStun += 30
+						enemy.position.x += -7
 			
 			"punch":
 				
 				if (abs(enemy.position.x - position.x) <= 60):
 					if enemy.block == "Standing":
-						enemy.health -= 7
+						enemy.health -= 7 * damageMult
 						enemy.hitStun += 6
 						enemy.position.x += -1
 					else:
-						enemy.health -= 25
+						enemy.health -= 20 * damageMult
 						enemy.hitStun += 14
-						enemy.position.x += -3
+						enemy.position.x += -10
 			"fireball":
 				pass
