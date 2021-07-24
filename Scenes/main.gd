@@ -3,10 +3,10 @@ extends Node2D
 onready var player2hp = $Viewport/Player2
 onready var player1hp = $Viewport/Player
 onready var pleaseplay = $pleaseplay
-export var rounds = 2
+export var rounds = 6
 export var p1wins = 0
 export var p2wins = 0
-export var roundTimer = 45
+export var roundTimer = 25
 
 func newround():
 	player1hp.health = 200
@@ -14,6 +14,16 @@ func newround():
 	player1hp.position.x = 32
 	player2hp.position.x = 208
 	pleaseplay.play()
+	yield(get_tree().create_timer(roundTimer), "timeout")
+	checkwinner()
+	
+func checkwinner():
+	if player1hp.health > player2hp.health:
+		p1wins +=1
+		newround()
+	if player2hp.health > player1hp.health:
+		p2wins +=1
+		newround()
 func _ready():
 	newround()
 		

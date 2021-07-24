@@ -5,8 +5,8 @@ var velocity = Vector2.ZERO
 export var flipSprite = false
 export var playerNumber = 0
 export var health = 200
-export var moveSpeed = 1
-export var backSpeed = 2
+export var moveSpeed = 1.3
+export var backSpeed = 2.3
 var canAttack = true
 var attackDir = "right"
 var block = "not"
@@ -99,12 +99,12 @@ func animation_handler():
 			$Sprite.play("walk")
 	
 	else:
-		if Input.is_action_pressed("p" + str(playerNumber) + "A") and attackDir == "Left":
+		if Input.is_action_pressed("p" + str(playerNumber) + "B") :
 			if (playerNumber == 2):
 				$Sprite.play("punch")
 			else:
 				$Sprite.play("kick")
-		if Input.is_action_pressed("p" + str(playerNumber) + "A") and attackDir == "Right":
+		if Input.is_action_pressed("p" + str(playerNumber) + "A") :
 			if (playerNumber == 2):
 				$Sprite.play("kick")
 			else:
