@@ -100,15 +100,13 @@ func animation_handler():
 	
 	else:
 		if Input.is_action_pressed("p" + str(playerNumber) + "B") :
-			if (playerNumber == 2):
+			
 				$Sprite.play("punch")
-			else:
-				$Sprite.play("kick")
+			
 		if Input.is_action_pressed("p" + str(playerNumber) + "A") :
-			if (playerNumber == 2):
+			
 				$Sprite.play("kick")
-			else:
-				$Sprite.play("punch")
+			
 		
 		if canAttack == true:
 			$Sprite.play("idle")
@@ -175,9 +173,15 @@ func attack(type):
 						enemy.position.x += 3
 					else:
 						hitSound.play()
+<<<<<<< Updated upstream
 						enemy.health -= 15 * damageMult
 						enemy.hitStun += 26
 						enemy.position.x += 9
+=======
+						enemy.health -= 20 * damageMult
+						enemy.hitStun += 20
+						enemy.position.x += 13
+>>>>>>> Stashed changes
 			"punch":
 				if (abs(enemy.position.x - position.x) <= 48):
 					if enemy.block == "Standing":
@@ -203,8 +207,8 @@ func attack(type):
 					else:
 						hitSound.play()
 						enemy.health -= 15 * damageMult
-						enemy.hitStun += 26
-						enemy.position.x += -9
+						enemy.hitStun += 20
+						enemy.position.x += -13
 			
 			"punch":
 				if (abs(enemy.position.x - position.x) <= 60):
