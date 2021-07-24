@@ -59,7 +59,6 @@ playerNumber = 1
 
 [node name="Player2" parent="Viewport" instance=ExtResource( 1 )]
 position = Vector2( 208, 104 )
-flipSprite = true
 playerNumber = 2
 
 [node name="TextureRect" type="TextureRect" parent="."]
