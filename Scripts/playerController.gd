@@ -42,9 +42,14 @@ func _physics_process(_delta):
 		movement_input()
 #	
 		attackCheck()
+	
+		
 	if hitStun >= 1:
-		hitStun -= 1
-		$Sprite.animation = "takehit"
+		hitStun -=1
+
+		$Sprite.play("takehit")
+			
+		
 	healthBar.value = health
 	
 	if (healthBar.value <= 0):
@@ -85,6 +90,7 @@ func movement_input():
 	else:
 		pass
 func animation_handler():
+	
 	if Input.is_action_pressed("p" + str(playerNumber) + "Left"):
 		if (playerNumber == 2):
 			$Sprite.play("walk")
@@ -107,6 +113,8 @@ func animation_handler():
 				$Sprite.play("kick")
 			else:
 				$Sprite.play("punch")
+		
+		
 		$Sprite.play("idle")
 
 
@@ -171,20 +179,23 @@ func attack(type):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if enemy.block == "Standing":
 						enemy.health -= 4
-						enemy.hitStun += 11
+						enemy.hitStun += 5
+						enemy.position.x += 1
 					else:
 						enemy.health -= 20
-						enemy.hitStun += 13
-			
+						enemy.hitStun += 9
+						enemy.position.x += 2
 			"punch":
 				
 				if (abs(enemy.position.x - position.x) <= 48):
 					if enemy.block == "Standing":
 						enemy.health -= 7
 						enemy.hitStun += 6
+						enemy.position.x += 1
 					else:
 						enemy.health -= 25
 						enemy.hitStun += 14
+						enemy.position.x += 3
 			"fireball":
 				pass
 	else:
@@ -195,10 +206,12 @@ func attack(type):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if enemy.block == "Standing":
 						enemy.health -= 4
-						enemy.hitStun += 11
+						enemy.hitStun += 5
+						enemy.position.x += 1
 					else:
 						enemy.health -= 20
-						enemy.hitStun += 13
+						enemy.hitStun += 9
+						enemy.position.x += 2
 			
 			"punch":
 				
@@ -206,8 +219,10 @@ func attack(type):
 					if enemy.block == "Standing":
 						enemy.health -= 7
 						enemy.hitStun += 6
+						enemy.position.x += -1
 					else:
 						enemy.health -= 25
 						enemy.hitStun += 14
+						enemy.position.x += -3
 			"fireball":
 				pass
