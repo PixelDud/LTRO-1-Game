@@ -1,8 +1,13 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Prefabs/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Assets/Images/Backgrounds/template.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Images/BG FOR MAIN FIGHT.png" type="Texture" id=2]
 [ext_resource path="res://Scenes/pauseMenu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Assets/Sounds/Music/main.mp3" type="AudioStream" id=4]
+[ext_resource path="res://Scenes/gameOverMenu.tscn" type="PackedScene" id=5]
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.737255, 0.196078, 0.196078, 1 )
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.737255, 0.196078, 0.196078, 1 )
@@ -28,7 +33,7 @@ margin_left = 8.0
 margin_top = 8.0
 margin_right = 56.0
 margin_bottom = 16.0
-custom_styles/fg = SubResource( 1 )
+custom_styles/fg = SubResource( 3 )
 max_value = 200.0
 percent_visible = false
 __meta__ = {
@@ -72,3 +77,10 @@ __meta__ = {
 }
 
 [node name="Pause Menu" parent="." instance=ExtResource( 3 )]
+
+[node name="Game Over" parent="." instance=ExtResource( 5 )]
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+volume_db = -2.0
+autoplay = true

@@ -34,6 +34,7 @@ func _physics_process(_delta):
 	else:
 		enemy = get_tree().get_root().get_node("World/Viewport/Player")
 	
+	in_bounds()
 	animation_handler()
 	if hitStun == 0:
 		movement_input()
@@ -56,6 +57,15 @@ func _physics_process(_delta):
 	
 	velocity = move_and_slide(velocity, Vector2.DOWN)
 
+func in_bounds():
+	if playerNumber == 1:
+		if (position.x < 16):
+			position.x = 16
+	else:
+		if (position.x > 224):
+			position.x = 224
+		
+
 func movement_input():
 	if Input.is_action_pressed("p" + str(playerNumber) + "Up"):
 		pass
@@ -65,7 +75,7 @@ func movement_input():
 		if playerNumber == 1:
 			block = true
 		if canAttack:
-			sprite.animation = "cblock"
+			$Sprite.play("p" + str(playerNumber) + "Block")
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Left"):
 		if (playerNumber == 2):
 			position.x -= moveSpeed 
@@ -81,7 +91,7 @@ func movement_input():
 			position.x += backSpeed * 0.3
 			block = true
 	else:
-		pass
+		block = false
 
 func animation_handler():
 	if Input.is_action_pressed("p" + str(playerNumber) + "Left"):
@@ -104,6 +114,7 @@ func animation_handler():
 
 func attackCheck():
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack:
+		$Attack.play()
 		print("Right Attack!")
 		canAttack = false
 		moveSpeed = 0
@@ -131,6 +142,7 @@ func attackCheck():
 		canAttack = true
 		print("Can attack now.")
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "B") and canAttack:
+		$Attack.play()
 		print("Left Attack!")
 		canAttack = false
 		backSpeed = 0
@@ -156,11 +168,14 @@ func attack(type):
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if enemy.block == true:
+						$BlockHit.play()
+						enemy.get_node("Sprite").play("p" + str(playerNumber) + "BlockHit")
 						enemy.health -= 4 * damageMult
 						enemy.hitStun += 5
 						enemy.position.x += 3
 					else:
 						$Hit.play()
+						enemy.get_node("Sprite").play("p" + str(playerNumber) + "Hit")
 
 						enemy.health -= 15 * damageMult
 						enemy.hitStun += 26
@@ -173,27 +188,31 @@ func attack(type):
 			"punch":
 				if (abs(enemy.position.x - position.x) <= 48):
 					if enemy.block == true:
+						$BlockHit.play()
+						enemy.get_node("Sprite").play("p" + str(playerNumber) + "BlockHit")
 						enemy.health -= 7 * damageMult
 						enemy.hitStun += 6
 						enemy.position.x += 3
 					else:
 						$Hit.play()
+						enemy.get_node("Sprite").play("p" + str(playerNumber) + "Hit")
 						enemy.health -= 25 * damageMult
 						enemy.hitStun += 14
 						enemy.position.x += 10
-			"fireball":
-				pass
 	else:
 		match type:
 			"kick":
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
 					if enemy.block == true:
+						$BlockHit.play()
+						enemy.get_node("Sprite").play("p" + str(playerNumber) + "BlockHit")
 						enemy.health -= 4 * damageMult
 						enemy.hitStun += 5
 						enemy.position.x -= 3
 					else:
 						$Hit.play()
+						enemy.get_node("Sprite").play("p" + str(playerNumber) + "Hit")
 						enemy.health -= 15 * damageMult
 						enemy.hitStun += 20
 						enemy.position.x -= 13
@@ -201,13 +220,14 @@ func attack(type):
 			"punch":
 				if (abs(enemy.position.x - position.x) <= 48):
 					if enemy.block == true:
+						$BlockHit.play()
+						enemy.get_node("Sprite").play("p" + str(playerNumber) + "BlockHit")
 						enemy.health -= 7 * damageMult
 						enemy.hitStun += 6
 						enemy.position.x -= 3
 					else:
 						$Hit.play()
+						enemy.get_node("Sprite").play("p" + str(playerNumber) + "Hit")
 						enemy.health -= 25 * damageMult
 						enemy.hitStun += 14
 						enemy.position.x -= 10
-			"fireball":
-				pass
