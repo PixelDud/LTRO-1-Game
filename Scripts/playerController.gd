@@ -6,25 +6,14 @@ export var playerNumber = 0
 export var health = 200
 export var moveSpeed = 1
 export var backSpeed = 2
-export var forwardsDashDefault = 50
-export var backDashDefault = 25
-var forwardsDash = forwardsDashDefault
-var backDash = backDashDefault
-var rightDashDir = Vector2(1,0)
-var leftDashDir = Vector2(-1,0)
-var rightDash = 0
-var leftDash = 0
-var canDash = true
-var isDashing = false
 var inputTimeout = 0.5
 var canAttack = true
-var attackDir = "right"
-var p1block = "not"
-var p2block = "not"
+var block = false
 var hitType = "nothing"
 var recovery = false
 var hitStun = 0
 var enemy = null
+var damageMult = 1
 #hitType is for deciding whether a move hits low, medium, or high
 #recovery is when you are recovering from doing a move
 
@@ -40,8 +29,6 @@ onready var healthBar = get_parent().get_node("p" + str(playerNumber) + "Health"
 onready var dashAudioCue = $dashAudioCue
 
 func _physics_process(_delta):
-	print(p2block)
-	print(p1block)
 	if playerNumber == 1:
 		enemy = get_tree().get_root().get_node("World/Viewport/Player2")
 	else:
@@ -53,8 +40,11 @@ func _physics_process(_delta):
 #		dash_input()
 		attackCheck()
 	if hitStun >= 1:
+		damageMult = 0.7
 		hitStun -= 1
 		$Sprite.animation = "takehit"
+	else:
+		damageMult = 1
 	healthBar.value = health
 	
 	if (healthBar.value <= 0):
@@ -67,38 +57,29 @@ func _physics_process(_delta):
 	velocity = move_and_slide(velocity, Vector2.DOWN)
 
 func movement_input():
-	p1block = "not"
-	p2block = "not"
 	if Input.is_action_pressed("p" + str(playerNumber) + "Up"):
-		attackDir = "Up"
-		if playerNumber == 1:
-			p1block = "not"
-		else:
-			p2block = "not"
+		pass
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Down"):
-		attackDir = "Down"
 		if playerNumber == 2:
-			p2block = "Down"
+			block = true
 		if playerNumber == 1:
-			p1block = "Down"
+			block = true
 		if canAttack:
 			sprite.animation = "cblock"
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Left"):
-		attackDir = "Left"
 		if (playerNumber == 2):
 			position.x -= moveSpeed 
-			p2block = "not"
+			block = false
 		else:
 			position.x -= backSpeed * 0.3
-			p1block = "Standing"
+			block = true
 	elif Input.is_action_pressed("p" + str(playerNumber) + "Right"):
-		attackDir = "Right"
 		if (playerNumber == 1):
 			position.x += moveSpeed
-			p1block = "not"
+			block = false
 		else:
 			position.x += backSpeed * 0.3
-			p2block = "Standing"
+			block = true
 	else:
 		pass
 
@@ -113,24 +94,13 @@ func animation_handler():
 			$Sprite.play("p" + str(playerNumber) + "Shuffle")
 		else:
 			$Sprite.play("p" + str(playerNumber) + "Walk")
-	
 	else:
-		if Input.is_action_pressed("p" + str(playerNumber) + "B") and canAttack == true:
-			if (playerNumber == 2):
-				$Sprite.play("p" + str(playerNumber) + "Punch")
-			else:
-				$Sprite.play("p" + str(playerNumber) + "Kick")
-		if Input.is_action_pressed("p" + str(playerNumber) + "A") and canAttack == true:
-			if (playerNumber == 2):
-				$Sprite.play("p" + str(playerNumber) + "Kick")
-			else:
-				$Sprite.play("p" + str(playerNumber) + "Punch")
-		
+		if Input.is_action_pressed("p" + str(playerNumber) + "A"):
+			$Sprite.play("p" + str(playerNumber) + "Punch")
+		if Input.is_action_pressed("p" + str(playerNumber) + "B"):
+			$Sprite.play("p" + str(playerNumber) + "Kick")
 		if canAttack == true:
 			$Sprite.play("p" + str(playerNumber) + "Idle")
-
-#stats
-#damage: down a = 20, forward a = 25, back a = 15 + 15, up a = 40
 
 func attackCheck():
 	if Input.is_action_just_pressed("p" + str(playerNumber) + "A") and canAttack:
@@ -167,7 +137,7 @@ func attackCheck():
 		moveSpeed = 0
 		print("Startup...")
 		yield(get_tree().create_timer(0.1), "timeout")
-		attack("lowkick")
+		attack("kick")
 		yield(get_tree().create_timer(0.05), "timeout")
 		print("Recovering...")
 		recovery = true
@@ -185,12 +155,12 @@ func attack(type):
 			"kick":
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
-					if enemy.block == "Standing":
+					if enemy.block == true:
 						enemy.health -= 4 * damageMult
 						enemy.hitStun += 5
 						enemy.position.x += 3
 					else:
-						hitSound.play()
+						$Hit.play()
 
 						enemy.health -= 15 * damageMult
 						enemy.hitStun += 26
@@ -202,12 +172,12 @@ func attack(type):
 
 			"punch":
 				if (abs(enemy.position.x - position.x) <= 48):
-					if enemy.block == "Standing":
+					if enemy.block == true:
 						enemy.health -= 7 * damageMult
 						enemy.hitStun += 6
 						enemy.position.x += 3
 					else:
-						hitSound.play()
+						$Hit.play()
 						enemy.health -= 25 * damageMult
 						enemy.hitStun += 14
 						enemy.position.x += 10
@@ -218,24 +188,24 @@ func attack(type):
 			"kick":
 				if (abs(enemy.position.x - position.x) <= 48):
 					print("Attacking Player " + str(enemy.playerNumber) + ".")
-					if enemy.block == "Standing":
+					if enemy.block == true:
 						enemy.health -= 4 * damageMult
 						enemy.hitStun += 5
 						enemy.position.x -= 3
 					else:
-						hitSound.play()
+						$Hit.play()
 						enemy.health -= 15 * damageMult
 						enemy.hitStun += 20
 						enemy.position.x -= 13
 
 			"punch":
 				if (abs(enemy.position.x - position.x) <= 48):
-					if enemy.block == "Standing":
+					if enemy.block == true:
 						enemy.health -= 7 * damageMult
 						enemy.hitStun += 6
 						enemy.position.x -= 3
 					else:
-						hitSound.play()
+						$Hit.play()
 						enemy.health -= 25 * damageMult
 						enemy.hitStun += 14
 						enemy.position.x -= 10
