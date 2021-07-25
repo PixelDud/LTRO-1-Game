@@ -24,9 +24,7 @@ var damageMult = 1
 # b = "p" + str(playerNumber) + "B"
 # a = "p" + str(playerNumber) + "A"
 # start = "p" + str(playerNumber) + "Start"
-onready var sprite = $Sprite
 onready var healthBar = get_parent().get_node("p" + str(playerNumber) + "Health")
-onready var dashAudioCue = $dashAudioCue
 
 func _physics_process(_delta):
 	if playerNumber == 1:

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Playbuttonspritesheet.png-3025748480a812a2e5e6ccccae5f2b5a.stex"
+path="res://.import/LTRO1_Boot.png-ab38247d5f07081e90bf36a0a874fdfc.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Images/Playbuttonspritesheet.png"
-dest_files=[ "res://.import/Playbuttonspritesheet.png-3025748480a812a2e5e6ccccae5f2b5a.stex" ]
+source_file="res://Assets/Images/LTRO1_Boot.png"
+dest_files=[ "res://.import/LTRO1_Boot.png-ab38247d5f07081e90bf36a0a874fdfc.stex" ]
 
 [params]
 

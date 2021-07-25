@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/ltro1 boot.wav-eddd6754a98564ddf805b1fbb9d14d71.sample"
+
+[deps]
+
+source_file="res://Assets/Sounds/SFX/ltro1 boot.wav"
+dest_files=[ "res://.import/ltro1 boot.wav-eddd6754a98564ddf805b1fbb9d14d71.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
